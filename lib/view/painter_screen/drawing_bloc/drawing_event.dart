@@ -13,6 +13,10 @@ class PreviousDrawing extends DrawingEvent {}
 
 class NextDrawing extends DrawingEvent {}
 
+class DuplicateDrawing extends DrawingEvent {}
+
+class DeleteDrawing extends DrawingEvent {}
+
 class Undo extends DrawingEvent {}
 
 class UpdateDrawing extends DrawingEvent {

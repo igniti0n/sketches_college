@@ -1,21 +1,38 @@
 part of 'drawing_bloc.dart';
 
 abstract class DrawingState extends Equatable {
-  const DrawingState(this.currentDrawing);
-  final List<CanvasPath> currentDrawing;
+  const DrawingState(
+      {required this.currentDrawing, required this.previousDrawing});
+  final Drawing currentDrawing;
+  final Drawing previousDrawing;
 
   @override
-  List<Object> get props => [currentDrawing];
+  List<Object> get props => [currentDrawing, previousDrawing];
 }
 
 class DrawingInitial extends DrawingState {
-  DrawingInitial(List<CanvasPath> currentDrawing) : super(currentDrawing);
+  DrawingInitial(
+      {required Drawing currentDrawing, required Drawing previousDrawing})
+      : super(
+          currentDrawing: currentDrawing,
+          previousDrawing: previousDrawing,
+        );
 }
 
 class DrawingLoading extends DrawingState {
-  DrawingLoading(List<CanvasPath> currentDrawing) : super(currentDrawing);
+  DrawingLoading(
+      {required Drawing currentDrawing, required Drawing previousDrawing})
+      : super(
+          currentDrawing: currentDrawing,
+          previousDrawing: previousDrawing,
+        );
 }
 
 class DrawingLoaded extends DrawingState {
-  DrawingLoaded(List<CanvasPath> currentDrawing) : super(currentDrawing);
+  DrawingLoaded(
+      {required Drawing currentDrawing, required Drawing previousDrawing})
+      : super(
+          currentDrawing: currentDrawing,
+          previousDrawing: previousDrawing,
+        );
 }

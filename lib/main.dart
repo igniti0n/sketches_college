@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fullscreen/fullscreen.dart';
+import 'package:paint_app/data/repositories/drawings_repository_impl.dart';
 import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
 import 'package:paint_app/view/painter_screen/settings_bloc/settings_bloc.dart';
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             home: MultiBlocProvider(
               providers: [
                 BlocProvider<DrawingBloc>(
-                  create: (_) => DrawingBloc(),
+                  create: (_) => DrawingBloc(DrawingsRepositoryImpl()),
                 ),
                 BlocProvider<SettingsBloc>(
                   create: (_) => SettingsBloc(),
@@ -45,5 +46,50 @@ class MyApp extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+class Dummy extends StatefulWidget {
+  Dummy({Key? key}) : super(key: key);
+
+  @override
+  _DummyState createState() => _DummyState();
+}
+
+class _DummyState extends State<Dummy> {
+  final GlobalKey _formKey = GlobalKey<FormState>();
+
+  Map<String, dynamic> data = {
+    "specialité": '',
+    "Nom:": '',
+    "Téléphone:": '',
+    "adresse:": '',
+    "autre:": '',
+  };
+
+  void _validateForm() async {}
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              validator: (String? text) {
+                if (text == null) return 'Text cant be empty!';
+                if (text.isEmpty) return 'Text cant be empty!';
+                return null; //this signals that it is good
+              },
+              onSaved: (String? text) {
+                //example on how to save data
+                data['Téléphone'] = text;
+              },
+            ),
+            RaisedButton(onPressed: () {
+              _validateForm();
+            }),
+          ],
+        ));
   }
 }

@@ -9,6 +9,18 @@ class Drawing extends Equatable {
     required this.canvasPaths,
   });
 
+  void removeLastPath() {
+    if (canvasPaths.isNotEmpty) canvasPaths.removeLast();
+  }
+
+  void addNewPath(CanvasPath newPath) {
+    this.canvasPaths.add(newPath);
+  }
+
+  void updateLastPath(CanvasPath newPath) {
+    canvasPaths.last = newPath;
+  }
+
   @override
   List<Object?> get props => [this.canvasPaths];
 }

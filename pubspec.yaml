@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  dartz: ^0.9.2
+  dartz: 0.10.0-nullsafety.1
   equatable: ^2.0.0
   expandable_bottom_sheet: ^1.0.0+2
   flutter_bloc: ^7.0.0

@@ -19,13 +19,7 @@ class PaintPage extends StatelessWidget {
           Expanded(
             child: ClipPath(
               clipper: CanvasClipper(),
-              child:
-                  BlocBuilder<DrawingBloc, DrawingState>(builder: (ctx, state) {
-                //log("Drawing bloc state:" + state.toString());
-                return PaintCanvas(
-                  initialdrawPoints: state.currentDrawing,
-                );
-              }),
+              child: PaintCanvas(),
             ),
           ),
           ConstrainedBox(
@@ -38,15 +32,9 @@ class PaintPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextButton(
-                      onPressed: () =>
-                          BlocProvider.of<SettingsBloc>(context).add(
-                        SettingsChanged(
-                          Paint()
-                            ..color = Colors.black
-                            ..blendMode = BlendMode.srcOver,
-                        ),
-                      ),
-                      child: Text('crna'),
+                      onPressed: () => BlocProvider.of<SettingsBloc>(context)
+                          .add(SettingsStrokeWidthChanged(20)),
+                      child: Text('20'),
                     ),
                   ),
                   Expanded(
@@ -76,30 +64,46 @@ class PaintPage extends StatelessWidget {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        BlocProvider.of<SettingsBloc>(context)
-                            .add(SettingsStrokeWidthChanged(-0.5));
+                        BlocProvider.of<DrawingBloc>(context)
+                            .add(DuplicateDrawing());
                       },
-                      child: Text('-0.5'),
+                      child: Text('dup'),
                     ),
                   ),
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        BlocProvider.of<SettingsBloc>(context)
-                            .add(SettingsStrokeWidthChanged(0.5));
+                        BlocProvider.of<DrawingBloc>(context)
+                            .add(DeleteDrawing());
                       },
-                      child: Text('+0.5'),
+                      child: Text('del'),
                     ),
                   ),
                   Expanded(
                     child: TextButton(
                       onPressed: () =>
-                          //   BlocProvider.of<DrawingBloc>(context).add(
-
-                          // Undo(),
-                          // ),
-                          takeScreenshotAndSave(),
+                          BlocProvider.of<DrawingBloc>(context).add(
+                        Undo(),
+                      ),
                       child: Text('Undo'),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () =>
+                          BlocProvider.of<DrawingBloc>(context).add(
+                        NextDrawing(),
+                      ),
+                      child: Text('next'),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () =>
+                          BlocProvider.of<DrawingBloc>(context).add(
+                        PreviousDrawing(),
+                      ),
+                      child: Text('prev'),
                     ),
                   ),
                 ],
@@ -113,11 +117,11 @@ class PaintPage extends StatelessWidget {
 }
 
 class PaintCanvas extends StatefulWidget {
-  final List<CanvasPath> initialdrawPoints;
+  // final List<CanvasPath> initialdrawPoints;
 
   const PaintCanvas({
     Key? key,
-    this.initialdrawPoints = const [],
+    // this.initialdrawPoints = const [],
   }) : super(key: key);
 
   @override
@@ -136,7 +140,7 @@ class _PaintCanvasState extends State<PaintCanvas> {
     drawPoints: [],
   );
 
-  void addPoint(Offset newPoint) {
+  void _addPoint(Offset newPoint) {
     _newPath.quadric(
       newPoint.dx,
       newPoint.dy,
@@ -145,7 +149,7 @@ class _PaintCanvasState extends State<PaintCanvas> {
     BlocProvider.of<DrawingBloc>(context).add(UpdateDrawing(_newPath));
   }
 
-  void addLastPoint() {
+  void _addLastPoint() {
     final Offset _lastOffset = _newPath.drawPoints.last;
 
     final Offset _additionalOffset =
@@ -177,9 +181,11 @@ class _PaintCanvasState extends State<PaintCanvas> {
             isComplex: true,
             willChange: true,
             foregroundPainter: AppPainter(
-              drawing: Drawing(
-                canvasPaths: state.currentDrawing,
-              ),
+              drawing: state.currentDrawing,
+            ),
+            painter: AppPainter(
+              drawing: state.previousDrawing,
+              isForeground: false,
             ),
             child: BlocListener<SettingsBloc, SettingsState>(
               listener: (context, state) {
@@ -197,16 +203,16 @@ class _PaintCanvasState extends State<PaintCanvas> {
 
                   _drawingBloc.add(StartDrawing(_newPath));
                 },
-                onPanUpdate: (det) => addPoint(
+                onPanUpdate: (det) => _addPoint(
                   Offset(det.localPosition.dx, det.localPosition.dy),
                 ),
-                onPanEnd: (det) => addLastPoint(),
+                onPanEnd: (det) => _addLastPoint(),
                 child: Container(
                   constraints: BoxConstraints(
                     maxHeight: _size.height,
                     maxWidth: _size.width,
                   ),
-                  color: Colors.white,
+                  color: Colors.transparent,
                 ),
               ),
             ),
