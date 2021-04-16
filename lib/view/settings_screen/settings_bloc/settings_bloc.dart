@@ -37,8 +37,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       yield SettingsLoaded(_currentPaint);
     } else if (event is SettingsStrokeWidthChanged) {
       if (_currentPaint.strokeWidth + event.strokeWidth != 0)
-        _currentPaint
-          ..strokeWidth = _currentPaint.strokeWidth + event.strokeWidth;
+        _currentPaint..strokeWidth = event.strokeWidth;
       yield SettingsLoading(_currentPaint);
       yield SettingsLoaded(_currentPaint);
     }

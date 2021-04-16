@@ -195,6 +195,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -221,6 +228,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.1"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -228,6 +249,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.9"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.0"
   logging:
     dependency: transitive
     description:
@@ -408,6 +436,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dev"
+    source: hosted
+    version: "19.1.56"
+  syncfusion_flutter_sliders:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_sliders
+      url: "https://pub.dev"
+    source: hosted
+    version: "19.1.56-beta"
   term_glyph:
     dependency: transitive
     description:

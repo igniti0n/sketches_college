@@ -43,7 +43,7 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
     } else if (event is DuplicateDrawing) {
       _drawingsRepositoryImpl.duplicateDrawing();
     } else if (event is DeleteDrawing) {
-      _drawingsRepositoryImpl.previousDrawing();
+      _drawingsRepositoryImpl.deleteDrawing();
     }
     yield DrawingLoaded(
       currentDrawing: _drawingsRepositoryImpl.getCurrentDrawing(),

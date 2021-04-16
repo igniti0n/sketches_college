@@ -71,7 +71,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   @override
   void nextDrawing() {
     _currentlyViewdSketch = _currentlyViewdSketch + 1;
-    log("DRAWING NO:$_currentlyViewdSketch");
+    // log("DRAWING NO:$_currentlyViewdSketch");
     if (_currentlyViewdSketch == _animatedSketch.drawings.length)
       _animatedSketch.drawings.add(Drawing(canvasPaths: []));
   }
@@ -79,23 +79,31 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   @override
   void previousDrawing() {
     if (_currentlyViewdSketch > 0) _currentlyViewdSketch--;
-    log("DRAWING NO:$_currentlyViewdSketch");
+    // log("DRAWING NO:$_currentlyViewdSketch");
   }
 
   @override
   void deleteDrawing() {
-    if (_currentlyViewdSketch > 0) {
-      _currentlyViewdSketch--;
-      _animatedSketch.drawings.removeLast();
+    if (_animatedSketch.drawings.length > 1) {
+      // log("drawings lenghts:${_animatedSketch.drawings.length}");
+      _animatedSketch.drawings.removeAt(_currentlyViewdSketch);
+      if (_currentlyViewdSketch == 0)
+        _currentlyViewdSketch++;
+      else
+        _currentlyViewdSketch--;
+      // log("drawings lenghts:${_animatedSketch.drawings.length}");
     }
   }
 
   @override
   void duplicateDrawing() {
     _currentlyViewdSketch++;
+    // log("inserting at $_currentlyViewdSketch");
     _animatedSketch.drawings.insert(
         _currentlyViewdSketch,
         Drawing(
-            canvasPaths: List.from(_animatedSketch.drawings.last.canvasPaths)));
+            canvasPaths: List.from(_animatedSketch.drawings
+                .elementAt(_currentlyViewdSketch - 1)
+                .canvasPaths)));
   }
 }

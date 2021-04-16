@@ -51,13 +51,15 @@ class AppPainter extends CustomPainter {
         }
       });
     }
+
     if (!isForeground)
-      canvas.drawRect(
-          Rect.fromLTWH(0, 0, size.width, size.height),
-          Paint()
-            ..blendMode = BlendMode.srcIn
-            ..color = Color.fromRGBO(0, 0, 0, 0.2)
-            ..style = PaintingStyle.fill);
+      canvas.drawColor(Color.fromRGBO(0, 0, 0, 0.2), BlendMode.srcIn);
+    // drawRect(
+    //     Rect.fromLTWH(0, 0, size.width, size.height),
+    //     Paint()
+    //       ..blendMode = BlendMode.srcIn
+    //       ..color = Color.fromRGBO(0, 0, 0, 0.2)
+    //       ..style = PaintingStyle.fill);
     canvas.restore();
   }
 
