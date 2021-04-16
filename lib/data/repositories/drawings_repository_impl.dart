@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:paint_app/domain/entities/animated_sketch.dart';
+import 'package:paint_app/domain/entities/sketch.dart';
 import 'package:paint_app/domain/entities/canvas_path.dart';
 import 'package:paint_app/domain/entities/drawing.dart';
 import 'package:paint_app/core/error/failures.dart';
@@ -10,7 +10,8 @@ import 'package:dartz/dartz.dart';
 import 'package:paint_app/domain/repositories/drawings_repository.dart';
 
 class DrawingsRepositoryImpl extends DrawingsRepository {
-  AnimatedSketch _animatedSketch = AnimatedSketch(drawings: [
+  Sketch _animatedSketch =
+      Sketch(id: '4', sketchName: 'dummy sketch', drawings: [
     Drawing(canvasPaths: [CanvasPath(paint: Paint(), drawPoints: [])]),
   ]);
   int _currentlyViewdSketch = 0;
