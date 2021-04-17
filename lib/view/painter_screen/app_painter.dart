@@ -35,7 +35,7 @@ class AppPainter extends CustomPainter {
 
           if (!isForeground) _paint..color = _paint.color.withOpacity(1);
 
-          final _raidus = math.sqrt(_currentPathSettings.strokeWidth) / 20;
+          final _radius = math.sqrt(_currentPathSettings.strokeWidth) / 20;
 
           canvas.drawPath(canvasPath.path, _paint);
 
@@ -45,7 +45,7 @@ class AppPainter extends CustomPainter {
                   canvasPath.drawPoints[i],
                   _currentPathSettings.strokeWidth < 1
                       ? _currentPathSettings.strokeWidth
-                      : _raidus,
+                      : _radius,
                   _paint);
             }
         }

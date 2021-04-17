@@ -24,6 +24,11 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   bool _canPreformAction() => _currentlyViewdSketch >= 0;
 
   @override
+  void setInitialDrawings(Sketch sketch) {
+    _animatedSketch = sketch;
+  }
+
+  @override
   void addNewCanvasPath(CanvasPath newCanvasPath) {
     if (_canPreformAction())
       _animatedSketch.drawings

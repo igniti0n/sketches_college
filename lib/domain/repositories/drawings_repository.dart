@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:paint_app/core/error/failures.dart';
 import 'package:paint_app/domain/entities/canvas_path.dart';
 import 'package:paint_app/domain/entities/drawing.dart';
+import 'package:paint_app/domain/entities/sketch.dart';
 import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
 
 abstract class DrawingsRepository {
@@ -9,6 +10,7 @@ abstract class DrawingsRepository {
 
   Future<void> storeDrawings(List<Drawing> drawings);
 
+  void setInitialDrawings(Sketch sketch);
   void updateLastCanvasPath(CanvasPath updatedCanvasPath);
   void addNewCanvasPath(CanvasPath newCanvasPath);
   void removeLastCanvasPath();

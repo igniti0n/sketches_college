@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:paint_app/core/navigation/router.dart';
+import 'package:paint_app/view/home_screen/sketches_bloc/sketches_bloc.dart';
 import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
 import 'package:paint_app/view/settings_screen/settings_bloc/settings_bloc.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
@@ -19,8 +21,6 @@ class SettingsPicker extends StatefulWidget {
 class _SettingsPickerState extends State<SettingsPicker> {
   @override
   Widget build(BuildContext context) {
-    //  _currentSliderValue = _settingsBloc.state.paintSettings.strokeWidth;
-
     return Container(
       color: Colors.grey,
       child: Row(
@@ -33,13 +33,6 @@ class _SettingsPickerState extends State<SettingsPicker> {
             flex: 1,
             child: Column(
               children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => BlocProvider.of<SettingsBloc>(context)
-                        .add(SettingsStrokeWidthChanged(20)),
-                    child: Text('20'),
-                  ),
-                ),
                 Expanded(
                   child: BlocBuilder<SettingsBloc, SettingsState>(
                     builder: (context, state) {
@@ -110,6 +103,17 @@ class _SettingsPickerState extends State<SettingsPicker> {
                       PreviousDrawing(),
                     ),
                     child: Text('prev'),
+                  ),
+                ),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () =>
+
+                        // BlocProvider.of<SketchesBloc>(context)
+                        //     .add(SettingsStrokeWidthChanged(20));
+                        Navigator.of(context)
+                            .pushReplacementNamed(HOME_SCREEN_ROUTE),
+                    child: Text('back'),
                   ),
                 ),
               ],

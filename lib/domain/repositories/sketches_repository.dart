@@ -6,6 +6,6 @@ abstract class SketchesRepository {
   Either<Failure, Sketch> getSketch(String id);
   Future<Either<Failure, List<Sketch>>> getSketches();
 
-  Future<Either<Failure, void>> deleteSketch(String id);
+  Future<Either<Failure, List<Sketch>>> deleteSketch(String id);
   Future<Either<Failure, List<Sketch>>> addNewSketch(Sketch newSketch);
 }

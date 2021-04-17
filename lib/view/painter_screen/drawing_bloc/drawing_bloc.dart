@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:paint_app/data/repositories/drawings_repository_impl.dart';
 import 'package:paint_app/domain/entities/canvas_path.dart';
 import 'package:paint_app/domain/entities/drawing.dart';
+import 'package:paint_app/domain/entities/sketch.dart';
 
 part 'drawing_event.dart';
 part 'drawing_state.dart';
@@ -44,6 +45,8 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
       _drawingsRepositoryImpl.duplicateDrawing();
     } else if (event is DeleteDrawing) {
       _drawingsRepositoryImpl.deleteDrawing();
+    } else if (event is ScreenOpened) {
+      _drawingsRepositoryImpl.setInitialDrawings(event.sketch);
     }
     yield DrawingLoaded(
       currentDrawing: _drawingsRepositoryImpl.getCurrentDrawing(),

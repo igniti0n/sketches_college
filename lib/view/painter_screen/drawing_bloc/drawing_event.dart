@@ -7,6 +7,12 @@ abstract class DrawingEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ScreenOpened extends DrawingEvent {
+  final Sketch sketch;
+
+  ScreenOpened(this.sketch);
+}
+
 class SaveDrawing extends DrawingEvent {}
 
 class PreviousDrawing extends DrawingEvent {}
