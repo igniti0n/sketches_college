@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/native/image_saver.dart';
-import '../../domain/entities/canvas_path.dart';
-import '../settings_screen/settings_bloc/settings_bloc.dart';
+import '../../../core/native/image_saver.dart';
+import '../../../domain/entities/canvas_path.dart';
+import '../../settings_screen/settings_bloc/settings_bloc.dart';
 import 'app_painter.dart';
-import 'drawing_bloc/drawing_bloc.dart';
-import 'settings_picker.dart';
+import '../drawing_bloc/drawing_bloc.dart';
+import '../settings_picker.dart';
 
 class PaintPage extends StatelessWidget {
   @override
@@ -22,23 +22,26 @@ class PaintPage extends StatelessWidget {
         height: _deviceSize.height,
         width: _deviceSize.width,
         child: Builder(
-          builder: (_) => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: _deviceSize.width / 8,
-                  maxHeight: _deviceSize.height,
+          builder: (_) => BlocProvider<SettingsBloc>(
+            create: (_) => SettingsBloc(),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: _deviceSize.width / 8,
+                    maxHeight: _deviceSize.height,
+                  ),
+                  child: SettingsPicker(),
                 ),
-                child: SettingsPicker(),
-              ),
-              Expanded(
-                child: ClipPath(
-                  clipper: CanvasClipper(),
-                  child: PaintCanvas(),
+                Expanded(
+                  child: ClipPath(
+                    clipper: CanvasClipper(),
+                    child: PaintCanvas(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

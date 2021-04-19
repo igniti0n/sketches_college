@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:paint_app/core/utils/paint_from.dart';
 import 'package:paint_app/domain/entities/canvas_path.dart';
 
-import '../../domain/entities/drawing.dart';
+import '../../../domain/entities/drawing.dart';
 
 class AppPainter extends CustomPainter {
   final Drawing drawing;

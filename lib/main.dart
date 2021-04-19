@@ -11,10 +11,11 @@ import 'package:paint_app/data/repositories/drawings_repository_impl.dart';
 import 'package:paint_app/data/repositories/sketches_repository_impl.dart';
 import 'package:paint_app/view/home_screen/home_screen.dart';
 import 'package:paint_app/view/home_screen/sketches_bloc/sketches_bloc.dart';
+import 'package:paint_app/view/overlay_screens/bloc/overlay_bloc.dart';
 import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
 import 'package:paint_app/view/settings_screen/settings_bloc/settings_bloc.dart';
 
-import 'view/painter_screen/paint_page.dart';
+import 'view/painter_screen/widgets/paint_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,8 @@ void main() {
   // ]);
   runApp(MyApp());
 }
+
+final SketchesRepositoryImpl _sketchesRepositoryImpl = SketchesRepositoryImpl();
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -37,11 +40,11 @@ class MyApp extends StatelessWidget {
               BlocProvider<DrawingBloc>(
                 create: (_) => DrawingBloc(DrawingsRepositoryImpl()),
               ),
-              BlocProvider<SettingsBloc>(
-                create: (_) => SettingsBloc(),
-              ),
               BlocProvider<SketchesBloc>(
-                create: (_) => SketchesBloc(SketchesRepositoryImpl()),
+                create: (_) => SketchesBloc(_sketchesRepositoryImpl),
+              ),
+              BlocProvider<OverlayBloc>(
+                create: (_) => OverlayBloc(_sketchesRepositoryImpl),
               ),
             ],
             child: MaterialApp(

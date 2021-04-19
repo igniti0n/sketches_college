@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:paint_app/domain/entities/drawing.dart';
 import 'package:paint_app/domain/entities/sketch.dart';
 import 'package:paint_app/core/error/failures.dart';
@@ -34,6 +36,7 @@ class SketchesRepositoryImpl extends SketchesRepository {
   Future<Either<Failure, List<Sketch>>> deleteSketch(String id) async {
     try {
       _userSketches.removeWhere((element) => element.id == id);
+
       return Future.microtask(() => Right(_userSketches));
     } catch (error) {
       return Left(SketchNotFoundFailure());
@@ -43,6 +46,7 @@ class SketchesRepositoryImpl extends SketchesRepository {
   @override
   Future<Either<Failure, List<Sketch>>> getSketches() async {
     try {
+      // _userSketches.forEach((element) => log(element.sketchName));
       return Future.microtask(() => Right(_userSketches));
     } catch (error) {
       return Left(SketchNotFoundFailure());
@@ -54,6 +58,22 @@ class SketchesRepositoryImpl extends SketchesRepository {
     try {
       _userSketches.add(newSketch);
       return Future.microtask(() => Right(_userSketches));
+    } catch (error) {
+      return Left(SketchNotFoundFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editSketch(Sketch newSketch) async {
+    try {
+      final _index =
+          _userSketches.indexWhere((element) => element.id == newSketch.id);
+      if (_index == -1) return Left(SketchNotFoundFailure());
+      _userSketches[_index] = newSketch; //TODO: IMPLEMENT BP UPDATE
+      // log(_index.toString());
+      _userSketches.forEach((element) => log(element.sketchName));
+      log(_userSketches[_index].sketchName);
+      return Future.microtask(() => Right(null));
     } catch (error) {
       return Left(SketchNotFoundFailure());
     }
