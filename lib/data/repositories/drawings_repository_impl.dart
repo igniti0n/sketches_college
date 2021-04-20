@@ -76,7 +76,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
   @override
   void nextDrawing() {
-    _currentlyViewdSketch = _currentlyViewdSketch + 1;
+    _currentlyViewdSketch++;
     // log("DRAWING NO:$_currentlyViewdSketch");
     if (_currentlyViewdSketch == _animatedSketch.drawings.length)
       _animatedSketch.drawings.add(Drawing(canvasPaths: []));
@@ -99,6 +99,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
         _currentlyViewdSketch--;
       // log("drawings lenghts:${_animatedSketch.drawings.length}");
     }
+    // log(_currentlyViewdSketch.toString());
   }
 
   @override

@@ -101,6 +101,8 @@ class _PaintCanvasState extends State<PaintCanvas> {
       ..shader = paint.shader;
   }
 
+  // final GlobalKey gk = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
@@ -109,8 +111,8 @@ class _PaintCanvasState extends State<PaintCanvas> {
     return BlocBuilder<DrawingBloc, DrawingState>(
       builder: (context, state) {
         return RepaintBoundary(
-          key: globalKey,
           child: CustomPaint(
+            key: globalKey,
             isComplex: true,
             willChange: true,
             foregroundPainter: AppPainter(

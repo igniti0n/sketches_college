@@ -52,27 +52,31 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
         if (state is ob.OverlayLoading) {
           return _loadingView(context);
         } else if (state is ob.OverlayError) {
-          return _errorView(context);
+          return _errorView(context, state.message);
         } else if (state is ob.OverlaySuccess) {
-          return _successView(context);
+          return _successView(context, state.message);
+        } else if (state is ob.OverlayEditSketchStarted) {
+          return _editView(context);
+        } else if (state is ob.OverlayDeleteSketchStarted) {
+          return _deleteView(context);
         }
-        return _editView(context);
+        return Container();
       },
     );
   }
 
   SimpleDialog _loadingView(BuildContext context) {
     return SimpleDialog(
-      title: Text("Updating sketch..."),
+      title: Text("Processing..."),
       children: [
         CircularProgressIndicator(),
       ],
     );
   }
 
-  SimpleDialog _errorView(BuildContext context) {
+  SimpleDialog _errorView(BuildContext context, String errorMessage) {
     return SimpleDialog(
-      title: Text("Editing failed to complete."),
+      title: Text(errorMessage),
       children: [
         TextButton(
             onPressed: () {
@@ -85,9 +89,9 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
     );
   }
 
-  SimpleDialog _successView(BuildContext context) {
+  SimpleDialog _successView(BuildContext context, String message) {
     return SimpleDialog(
-      title: Text("Editing completed successfully!"),
+      title: Text(message),
       children: [
         TextButton(
             onPressed: () {
@@ -119,6 +123,30 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
               ));
             },
             child: Text("Done")),
+      ],
+    );
+  }
+
+  SimpleDialog _deleteView(
+    BuildContext context,
+  ) {
+    return SimpleDialog(
+      title:
+          Text("You want to delete sketch ${widget.editingSketch.sketchName}?"),
+      children: [
+        TextButton(
+            onPressed: () {
+              BlocProvider.of<ob.OverlayBloc>(context).add(ob.DeleteSketch(
+                widget.editingSketch.id,
+              ));
+            },
+            child: Text("Delete")),
+        TextButton(
+            onPressed: () {
+              BlocProvider.of<ob.OverlayBloc>(context)
+                  .add(ob.ExitOverlay(context));
+            },
+            child: Text("Keep")),
       ],
     );
   }

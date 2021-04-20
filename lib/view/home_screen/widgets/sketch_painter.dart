@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/paint_from.dart';
@@ -23,33 +25,35 @@ class SketchPainter extends CustomPainter {
     if (canvasPaths.isNotEmpty) {
       canvasPaths.forEach((CanvasPath canvasPath) {
         if (canvasPath.drawPoints.isNotEmpty) {
-          // final Paint _currentPathSettings = canvasPath.paint;
+          final Paint _currentPathSettings = canvasPath.paint;
 
           _paint = paintFrom(canvasPath.paint)..style = PaintingStyle.stroke;
 
           // if (!isForeground) _paint..color = _paint.color.withOpacity(1);
 
-          // final _radius = sqrt(_currentPathSettings.strokeWidth) / 20;
+          final _radius = sqrt(_currentPathSettings.strokeWidth) / 20;
 
-          final List<Offset> _adjustedDrawPoints =
-              canvasPath.drawPoints.map((e) => e.scale(0.6, 0.6)).toList();
+          final List<Offset> _adjustedDrawPoints = canvasPath.drawPoints
+              .map((e) => e.scale(1 / 1.5, 1 / 2))
+              .toList();
 
           final double _pathScale = isLandscape ? 10 : 1.5;
 
-          canvas.drawPath(
-              canvasPath.path.shift(Offset(-1, -1)
-                  .scale(size.width / _pathScale, size.height / _pathScale)),
-              _paint);
+          if (_currentPathSettings.strokeWidth <= 2)
+            canvas.drawPath(
+                canvasPath.path.shift(Offset(-1, -1)
+                    .scale(size.width / _pathScale, size.height / _pathScale)),
+                _paint);
 
-          // if (_currentPathSettings.strokeWidth > 1)
-          //   for (int i = 0; i < _adjustedDrawPoints.length - 1; i++) {
-          //     canvas.drawCircle(
-          //         _adjustedDrawPoints[i],
-          //         _currentPathSettings.strokeWidth < 1
-          //             ? _currentPathSettings.strokeWidth
-          //             : _radius,
-          //         _paint);
-          //   }
+          if (_currentPathSettings.strokeWidth > 2)
+            for (int i = 0; i < _adjustedDrawPoints.length - 1; i++) {
+              canvas.drawCircle(
+                  _adjustedDrawPoints[i],
+                  _currentPathSettings.strokeWidth < 1
+                      ? _currentPathSettings.strokeWidth
+                      : _radius,
+                  _paint);
+            }
         }
       });
     }

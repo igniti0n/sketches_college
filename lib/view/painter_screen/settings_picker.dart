@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:paint_app/core/navigation/router.dart';
-import 'package:paint_app/view/home_screen/sketches_bloc/sketches_bloc.dart';
-import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
-import 'package:paint_app/view/settings_screen/settings_bloc/settings_bloc.dart';
+import 'package:paint_app/view/settings_screen/widgets/settings_menu_button.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
+
+import '../../contants.dart';
+import '../../core/navigation/router.dart';
+import '../settings_screen/settings_bloc/settings_bloc.dart';
+import 'drawing_bloc/drawing_bloc.dart';
 
 class SettingsPicker extends StatefulWidget {
   SettingsPicker({
@@ -22,12 +24,27 @@ class _SettingsPickerState extends State<SettingsPicker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey,
+      color: medium,
       child: Row(
         children: [
           Flexible(
             flex: 1,
-            child: StrokeSetting(),
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 7,
+                  child: StrokeSetting(),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: SettingsMenuButton(
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(SETTINGS_SCREEN_ROUTE),
+                      text: '....',
+                      splashColor: purpleBar),
+                ),
+              ],
+            ),
           ),
           Flexible(
             flex: 1,
@@ -54,67 +71,59 @@ class _SettingsPickerState extends State<SettingsPicker> {
                   // ),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () => BlocProvider.of<SettingsBloc>(context).add(
-                      SettingsChanged(
-                        Paint()..blendMode = BlendMode.clear,
-                      ),
-                    ),
-                    child: Text('erase'),
-                  ),
+                  child: SettingsMenuButton(
+                      onTap: () => BlocProvider.of<SettingsBloc>(context).add(
+                            SettingsChanged(
+                              Paint()..blendMode = BlendMode.clear,
+                            ),
+                          ),
+                      text: 'Erase',
+                      splashColor: purpleBar),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      BlocProvider.of<DrawingBloc>(context)
-                          .add(DuplicateDrawing());
-                    },
-                    child: Text('dup'),
-                  ),
+                  child: SettingsMenuButton(
+                      onTap: () => BlocProvider.of<DrawingBloc>(context)
+                          .add(DuplicateDrawing()),
+                      text: 'Dup',
+                      splashColor: purpleBar),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      BlocProvider.of<DrawingBloc>(context)
-                          .add(DeleteDrawing());
-                    },
-                    child: Text('del'),
-                  ),
+                  child: SettingsMenuButton(
+                      onTap: () => BlocProvider.of<DrawingBloc>(context)
+                          .add(DeleteDrawing()),
+                      text: 'Del',
+                      splashColor: purpleBar),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () => BlocProvider.of<DrawingBloc>(context).add(
-                      Undo(),
-                    ),
-                    child: Text('Undo'),
-                  ),
+                  child: SettingsMenuButton(
+                      onTap: () => BlocProvider.of<DrawingBloc>(context).add(
+                            Undo(),
+                          ),
+                      text: 'Undo',
+                      splashColor: purpleBar),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () => BlocProvider.of<DrawingBloc>(context).add(
-                      NextDrawing(),
-                    ),
-                    child: Text('next'),
-                  ),
+                  child: SettingsMenuButton(
+                      onTap: () => BlocProvider.of<DrawingBloc>(context).add(
+                            NextDrawing(),
+                          ),
+                      text: 'Next',
+                      splashColor: purpleBar),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () => BlocProvider.of<DrawingBloc>(context).add(
-                      PreviousDrawing(),
-                    ),
-                    child: Text('prev'),
-                  ),
+                  child: SettingsMenuButton(
+                      onTap: () => BlocProvider.of<DrawingBloc>(context).add(
+                            PreviousDrawing(),
+                          ),
+                      text: 'Prev',
+                      splashColor: purpleBar),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () =>
-
-                        // BlocProvider.of<SketchesBloc>(context)
-                        //     .add(SettingsStrokeWidthChanged(20));
-                        Navigator.of(context)
-                            .pushReplacementNamed(HOME_SCREEN_ROUTE),
-                    child: Text('back'),
-                  ),
+                  child: SettingsMenuButton(
+                      onTap: () => Navigator.of(context)
+                          .pushReplacementNamed(HOME_SCREEN_ROUTE),
+                      text: 'Back',
+                      splashColor: purpleBar),
                 ),
               ],
             ),

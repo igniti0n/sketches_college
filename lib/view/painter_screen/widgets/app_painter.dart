@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:math' as math;
+import 'package:vector_math/vector_math.dart' as vm;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class AppPainter extends CustomPainter {
     final List<CanvasPath> canvasPaths = drawing.canvasPaths;
 
     var _paint = Paint();
+
     canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), Paint());
 
     if (canvasPaths.isNotEmpty) {

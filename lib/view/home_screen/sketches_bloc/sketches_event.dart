@@ -11,14 +11,6 @@ class FetchAllSketches extends SketchesEvent {}
 
 class AddNewSketch extends SketchesEvent {}
 
-class EditSketch extends SketchesEvent {
-  final Sketch editedSketch;
-
-  EditSketch(this.editedSketch);
-}
-
-class DeleteSketch extends SketchesEvent {}
-
 class FetchSketch extends SketchesEvent {
   final String sketchId;
 

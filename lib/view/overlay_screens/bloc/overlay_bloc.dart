@@ -21,13 +21,22 @@ class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
     if (event is ShowEditOverlay) {
       showEditSketchOverlay(event.context, event.sketch);
       yield OverlayEditSketchStarted();
+    } else if (event is ShowDeleteOverlay) {
+      showEditSketchOverlay(event.context, event.sketch);
+      yield OverlayDeleteSketchStarted();
     } else if (event is ExitOverlay) {
       Navigator.of(event.context).pop();
       yield OverlayInitial();
     } else if (event is EditSketch) {
       yield OverlayLoading();
       final either = await _sketchesRepository.editSketch(event.editedSketch);
-      yield either.fold((l) => OverlayError(""), (r) => OverlaySuccess());
+      yield either.fold((l) => OverlayError('Editing failed to complete.'),
+          (r) => OverlaySuccess('Editing completed successfully!'));
+    } else if (event is DeleteSketch) {
+      yield OverlayLoading();
+      final either = await _sketchesRepository.deleteSketch(event.sketchId);
+      yield either.fold((l) => OverlayError('Deleting sketch failed.'),
+          (r) => OverlaySuccess('Deleting completed successfully!'));
     }
   }
 }

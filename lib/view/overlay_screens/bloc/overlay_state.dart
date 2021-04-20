@@ -9,9 +9,18 @@ abstract class OverlayState extends Equatable {
 
 class OverlayInitial extends OverlayState {}
 
+//!editing sketch states
 class OverlayEditSketchStarted extends OverlayState {}
 
-class OverlaySuccess extends OverlayState {}
+class OverlayDeleteSketchStarted extends OverlayState {}
+
+//!Overlay progress states
+class OverlaySuccess extends OverlayState {
+  final String message;
+
+  OverlaySuccess(this.message);
+
+}
 
 class OverlayLoading extends OverlayState {}
 

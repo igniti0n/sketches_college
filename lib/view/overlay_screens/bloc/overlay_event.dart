@@ -18,10 +18,26 @@ class ShowEditOverlay extends OverlayEvent {
   });
 }
 
+class ShowDeleteOverlay extends OverlayEvent {
+  final Sketch sketch;
+  final BuildContext context;
+
+  ShowDeleteOverlay({
+    required this.sketch,
+    required this.context,
+  });
+}
+
 class EditSketch extends OverlayEvent {
   final Sketch editedSketch;
 
   EditSketch(this.editedSketch);
+}
+
+class DeleteSketch extends OverlayEvent {
+  final String sketchId;
+
+  DeleteSketch(this.sketchId);
 }
 
 class ExitOverlay extends OverlayEvent {

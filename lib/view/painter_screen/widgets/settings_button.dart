@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SketchButton extends StatelessWidget {
-  final double maxWidth;
+class SettingsButton extends StatelessWidget {
   final IconData icon;
   final Color splashColor;
   final Function() onTap;
-  const SketchButton({
+  const SettingsButton({
     Key? key,
-    required this.maxWidth,
     required this.onTap,
     required this.icon,
     required this.splashColor,
@@ -34,7 +32,6 @@ class SketchButton extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(100)),
             child: Icon(
               icon,
-              size: maxWidth / 4,
             ),
           ),
         ),
