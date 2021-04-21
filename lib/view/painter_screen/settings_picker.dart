@@ -3,12 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:paint_app/view/settings_screen/widgets/settings_menu_button.dart';
+import 'package:paint_app/view/options_screen/widgets/settings_menu_button.dart';
+import 'package:paint_app/view/overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
 
 import '../../contants.dart';
 import '../../core/navigation/router.dart';
-import '../settings_screen/settings_bloc/settings_bloc.dart';
+import 'settings_bloc/settings_bloc.dart';
 import 'drawing_bloc/drawing_bloc.dart';
 
 class SettingsPicker extends StatefulWidget {
@@ -53,8 +54,16 @@ class _SettingsPickerState extends State<SettingsPicker> {
                 Expanded(
                   child: BlocBuilder<SettingsBloc, SettingsState>(
                     builder: (context, state) {
-                      return ColorPickerWidget(
-                        currentColor: state.paintSettings.color,
+                      return GestureDetector(
+                        onTap: () => BlocProvider.of<OverlayBloc>(context).add(
+                            ShowColorPicker(
+                                currentColor: state.paintSettings.color,
+                                context: context)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: state.paintSettings.color,
+                              border: Border.all(color: Colors.white)),
+                        ),
                       );
                     },
                   ),
@@ -75,6 +84,7 @@ class _SettingsPickerState extends State<SettingsPicker> {
                       onTap: () => BlocProvider.of<SettingsBloc>(context).add(
                             SettingsChanged(
                               Paint()..blendMode = BlendMode.clear,
+                              // Paint()..color = Colors.white,
                             ),
                           ),
                       text: 'Erase',
@@ -159,56 +169,5 @@ class _StrokeSettingState extends State<StrokeSetting> {
           setState(() => _currentSliderValue = newStrokeWidth);
           _settingsBloc.add(SettingsStrokeWidthChanged(_currentSliderValue));
         });
-  }
-}
-
-class ColorPickerWidget extends StatelessWidget {
-  final Color currentColor;
-
-  ColorPickerWidget({Key? key, required this.currentColor}) : super(key: key);
-
-  Color _selectedColor = Color(255);
-
-  @override
-  Widget build(BuildContext context) {
-    _selectedColor = currentColor;
-    return InkWell(
-      onTap: () => showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Pick a color!'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: currentColor,
-              onColorChanged: (Color newColor) {
-                _selectedColor = newColor;
-              },
-              showLabel: true,
-              pickerAreaHeightPercent: 0.8,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Got it'),
-              onPressed: () {
-                BlocProvider.of<SettingsBloc>(context).add(SettingsChanged(
-                  Paint()
-                    ..color = _selectedColor
-                    ..blendMode = BlendMode.srcOver,
-                ));
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          border: Border.all(color: Colors.white),
-          color: currentColor,
-        ),
-      ),
-    );
   }
 }

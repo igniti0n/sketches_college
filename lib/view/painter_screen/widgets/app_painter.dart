@@ -12,10 +12,12 @@ import '../../../domain/entities/drawing.dart';
 class AppPainter extends CustomPainter {
   final Drawing drawing;
   final bool isForeground;
+  final isPreview;
 
   AppPainter({
     required this.drawing,
     this.isForeground = true,
+    this.isPreview = false,
   });
 
   @override
@@ -37,14 +39,19 @@ class AppPainter extends CustomPainter {
 
           if (!isForeground) _paint..color = _paint.color.withOpacity(1);
 
-          final _radius = math.sqrt(_currentPathSettings.strokeWidth) / 20;
+          final _radius = math.sqrt(_currentPathSettings.strokeWidth) /
+              ((_currentPathSettings.strokeWidth > 6) ? 20 : 60);
 
-          canvas.drawPath(canvasPath.path, _paint);
+          Path _path = Path.from(canvasPath.path);
+          // if (isPreview) _path = _path.shift(Offset(-100, 0));
+
+          canvas.drawPath(_path, _paint);
 
           if (_currentPathSettings.strokeWidth > 1)
             for (int i = 0; i < canvasPath.drawPoints.length - 1; i++) {
               canvas.drawCircle(
-                  canvasPath.drawPoints[i],
+                  canvasPath
+                      .drawPoints[i], //.translate((isPreview ? -100 : 0), 0),
                   _currentPathSettings.strokeWidth < 1
                       ? _currentPathSettings.strokeWidth
                       : _radius,
@@ -62,6 +69,7 @@ class AppPainter extends CustomPainter {
     //       ..blendMode = BlendMode.srcIn
     //       ..color = Color.fromRGBO(0, 0, 0, 0.2)
     //       ..style = PaintingStyle.fill);
+
     canvas.restore();
   }
 

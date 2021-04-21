@@ -23,6 +23,8 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
   bool _canPreformAction() => _currentlyViewdSketch >= 0;
 
+  get currentSketch => _animatedSketch;
+
   @override
   void setInitialDrawings(Sketch sketch) {
     _animatedSketch = sketch;
@@ -112,5 +114,11 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
             canvasPaths: List.from(_animatedSketch.drawings
                 .elementAt(_currentlyViewdSketch - 1)
                 .canvasPaths)));
+  }
+
+  @override
+  void changeBackgroundColorOfCurrentDrawing(Color color) {
+    _animatedSketch.drawings.elementAt(_currentlyViewdSketch).backgroundColor =
+        color;
   }
 }

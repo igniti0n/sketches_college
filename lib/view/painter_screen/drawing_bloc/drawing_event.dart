@@ -25,6 +25,12 @@ class DeleteDrawing extends DrawingEvent {}
 
 class Undo extends DrawingEvent {}
 
+class BackgroundColorChanged extends DrawingEvent {
+  final Color color;
+
+  BackgroundColorChanged(this.color);
+}
+
 class UpdateDrawing extends DrawingEvent {
   final CanvasPath canvasPath;
   const UpdateDrawing(this.canvasPath);

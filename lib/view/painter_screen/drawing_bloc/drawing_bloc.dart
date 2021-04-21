@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 import 'package:paint_app/data/repositories/drawings_repository_impl.dart';
 import 'package:paint_app/domain/entities/canvas_path.dart';
 import 'package:paint_app/domain/entities/drawing.dart';
@@ -47,6 +48,9 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
       _drawingsRepositoryImpl.deleteDrawing();
     } else if (event is ScreenOpened) {
       _drawingsRepositoryImpl.setInitialDrawings(event.sketch);
+    } else if (event is BackgroundColorChanged) {
+      _drawingsRepositoryImpl
+          .changeBackgroundColorOfCurrentDrawing(event.color);
     }
     yield DrawingLoaded(
       currentDrawing: _drawingsRepositoryImpl.getCurrentDrawing(),

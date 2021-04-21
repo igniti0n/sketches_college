@@ -4,8 +4,10 @@ import 'package:paint_app/domain/entities/canvas_path.dart';
 
 class Drawing extends Equatable {
   final List<CanvasPath> canvasPaths;
+  Color backgroundColor;
 
-  const Drawing({
+  Drawing({
+    this.backgroundColor = Colors.white,
     required this.canvasPaths,
   });
 

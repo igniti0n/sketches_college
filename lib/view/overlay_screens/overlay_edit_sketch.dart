@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_app/domain/entities/sketch.dart';
 import 'package:paint_app/view/home_screen/sketches_bloc/sketches_bloc.dart';
-import 'package:paint_app/view/overlay_screens/bloc/overlay_bloc.dart' as ob;
+import 'package:paint_app/view/overlay_screens/overlay_bloc/overlay_bloc.dart'
+    as ob;
 
 Future<void> showEditSketchOverlay(
   BuildContext context,

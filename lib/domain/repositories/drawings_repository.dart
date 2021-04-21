@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dartz/dartz.dart';
 import 'package:paint_app/core/error/failures.dart';
 import 'package:paint_app/domain/entities/canvas_path.dart';
@@ -10,6 +12,8 @@ abstract class DrawingsRepository {
 
   Future<void> storeDrawings(List<Drawing> drawings);
 
+  get currentSketch;
+
   void setInitialDrawings(Sketch sketch);
   void updateLastCanvasPath(CanvasPath updatedCanvasPath);
   void addNewCanvasPath(CanvasPath newCanvasPath);
@@ -19,5 +23,6 @@ abstract class DrawingsRepository {
   void previousDrawing();
 
   void duplicateDrawing();
+  void changeBackgroundColorOfCurrentDrawing(Color color);
   void deleteDrawing();
 }

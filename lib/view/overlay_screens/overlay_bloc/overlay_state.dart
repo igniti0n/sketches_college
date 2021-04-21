@@ -14,12 +14,14 @@ class OverlayEditSketchStarted extends OverlayState {}
 
 class OverlayDeleteSketchStarted extends OverlayState {}
 
+//!Color picker
+class OverlayColorPickerStarted extends OverlayState {}
+
 //!Overlay progress states
 class OverlaySuccess extends OverlayState {
   final String message;
 
   OverlaySuccess(this.message);
-
 }
 
 class OverlayLoading extends OverlayState {}

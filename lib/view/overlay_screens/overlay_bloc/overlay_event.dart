@@ -28,6 +28,18 @@ class ShowDeleteOverlay extends OverlayEvent {
   });
 }
 
+class ShowColorPicker extends OverlayEvent {
+  final Color currentColor;
+  final BuildContext context;
+  final bool isForBackground;
+
+  ShowColorPicker({
+    required this.currentColor,
+    required this.context,
+    this.isForBackground = false,
+  });
+}
+
 class EditSketch extends OverlayEvent {
   final Sketch editedSketch;
 

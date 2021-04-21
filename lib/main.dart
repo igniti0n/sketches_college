@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fullscreen/fullscreen.dart';
+import 'package:paint_app/view/animation_preview_screen/animation_bloc/animation_bloc.dart';
 
 import 'core/navigation/router.dart';
 import 'data/repositories/drawings_repository_impl.dart';
 import 'data/repositories/sketches_repository_impl.dart';
 import 'view/home_screen/sketches_bloc/sketches_bloc.dart';
-import 'view/overlay_screens/bloc/overlay_bloc.dart';
+import 'view/overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'view/painter_screen/drawing_bloc/drawing_bloc.dart';
+import 'view/painter_screen/settings_bloc/settings_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +19,13 @@ void main() {
   //   DeviceOrientation.landscapeLeft,
   // ]);
   //
-  debugPaintPointersEnabled = true;
+  // debugPaintPointersEnabled = true;
 
   runApp(MyApp());
 }
 
 final SketchesRepositoryImpl _sketchesRepositoryImpl = SketchesRepositoryImpl();
+final DrawingsRepositoryImpl _drawingsRepositoryImpl = DrawingsRepositoryImpl();
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -34,7 +37,7 @@ class MyApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<DrawingBloc>(
-                create: (_) => DrawingBloc(DrawingsRepositoryImpl()),
+                create: (_) => DrawingBloc(_drawingsRepositoryImpl),
               ),
               BlocProvider<SketchesBloc>(
                 create: (_) => SketchesBloc(_sketchesRepositoryImpl),
@@ -42,10 +45,16 @@ class MyApp extends StatelessWidget {
               BlocProvider<OverlayBloc>(
                 create: (_) => OverlayBloc(_sketchesRepositoryImpl),
               ),
+              BlocProvider<SettingsBloc>(
+                create: (_) => SettingsBloc(),
+              ),
+              BlocProvider<AnimationBloc>(
+                create: (_) => AnimationBloc(_drawingsRepositoryImpl),
+              ),
             ],
             child: MaterialApp(
               title: 'Flutter Demo',
-              checkerboardRasterCacheImages: true,
+              // checkerboardRasterCacheImages: true,
               debugShowCheckedModeBanner: false,
               // debugShowMaterialGrid: true,
               theme: ThemeData(
