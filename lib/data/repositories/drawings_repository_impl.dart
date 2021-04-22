@@ -2,6 +2,9 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:paint_app/data/models/canvas_path_model.dart';
+import 'package:paint_app/data/models/drawing_model.dart';
+import 'package:paint_app/data/models/sketch_model.dart';
 import 'package:paint_app/domain/entities/sketch.dart';
 import 'package:paint_app/domain/entities/canvas_path.dart';
 import 'package:paint_app/domain/entities/drawing.dart';
@@ -10,9 +13,12 @@ import 'package:dartz/dartz.dart';
 import 'package:paint_app/domain/repositories/drawings_repository.dart';
 
 class DrawingsRepositoryImpl extends DrawingsRepository {
-  Sketch _animatedSketch =
-      Sketch(id: '4', sketchName: 'dummy sketch', drawings: [
-    Drawing(canvasPaths: [CanvasPath(paint: Paint(), drawPoints: [])]),
+  //!treba dohvatiti sve crteze za odabrani sketch, ovdje je casham, save pri izslasku(ili dodaj gumb za save, a pitaj hoce li save kad izlazi?)
+  SketchModel _animatedSketch =
+      SketchModel(id: '4', sketchName: 'dummy sketch', drawings: [
+    DrawingModel(
+        sketchId: '4',
+        canvasPaths: [CanvasPathModel(paint: Paint(), drawPoints: [])]),
   ]);
   int _currentlyViewdSketch = 0;
 
@@ -27,7 +33,13 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
   @override
   void setInitialDrawings(Sketch sketch) {
-    _animatedSketch = sketch;
+    _animatedSketch = SketchModel(
+      sketchName: sketch.sketchName,
+      drawings: sketch.drawings,
+      id: sketch.id,
+    );
+
+    _currentlyViewdSketch = 0;
   }
 
   @override
@@ -62,10 +74,10 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   }
 
   Drawing getCurrentDrawing() {
-    log(_animatedSketch.drawings
-        .elementAt(_currentlyViewdSketch)
-        .canvasPaths
-        .toString());
+    // log((_animatedSketch.drawings.elementAt(_currentlyViewdSketch)
+    //         )
+    //     .toMap()
+    //     .toString());
     return _animatedSketch.drawings.elementAt(_currentlyViewdSketch);
   }
 
@@ -81,7 +93,8 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
     _currentlyViewdSketch++;
     // log("DRAWING NO:$_currentlyViewdSketch");
     if (_currentlyViewdSketch == _animatedSketch.drawings.length)
-      _animatedSketch.drawings.add(Drawing(canvasPaths: []));
+      _animatedSketch.drawings
+          .add(Drawing(canvasPaths: [], sketchId: _animatedSketch.id));
   }
 
   @override
@@ -111,9 +124,11 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
     _animatedSketch.drawings.insert(
         _currentlyViewdSketch,
         Drawing(
-            canvasPaths: List.from(_animatedSketch.drawings
-                .elementAt(_currentlyViewdSketch - 1)
-                .canvasPaths)));
+          canvasPaths: List.from(_animatedSketch.drawings
+              .elementAt(_currentlyViewdSketch - 1)
+              .canvasPaths),
+          sketchId: _animatedSketch.id,
+        ));
   }
 
   @override

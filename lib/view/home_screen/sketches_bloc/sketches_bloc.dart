@@ -32,10 +32,7 @@ class SketchesBloc extends Bloc<SketchesEvent, SketchesState> {
       );
     } else if (event is AddNewSketch) {
       yield LoadingSketches([]);
-      final either = await _sketchesRepository.addNewSketch(Sketch(
-          id: "jeben id",
-          drawings: [Drawing(canvasPaths: [])],
-          sketchName: "new sketch"));
+      final either = await _sketchesRepository.addNewSketch();
       yield either.fold(
         (Failure failure) => Error(
           [],

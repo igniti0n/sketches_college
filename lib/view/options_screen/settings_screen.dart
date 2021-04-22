@@ -10,18 +10,12 @@ class OptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: medium,
-      body: Row(
-        children: [
-          Flexible(
-            flex: 1,
-            child: SettingsMenu(),
-          ),
-          Flexible(
-            flex: 2,
-            child: AnimationPreview(),
-          )
-        ],
-      ),
+      body: SettingsMenu(),
+
+      // Flexible(
+      //   flex: 2,
+      //   child: AnimationPreview(),
+      // )
     );
   }
 }

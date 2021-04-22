@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fullscreen/fullscreen.dart';
 import 'package:paint_app/view/animation_preview_screen/animation_bloc/animation_bloc.dart';
@@ -14,10 +15,11 @@ import 'view/painter_screen/settings_bloc/settings_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.landscapeRight,
-  //   DeviceOrientation.landscapeLeft,
-  // ]);
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
+  ]);
   //
   // debugPaintPointersEnabled = true;
 

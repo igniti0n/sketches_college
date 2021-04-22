@@ -5,7 +5,7 @@ import 'package:paint_app/domain/entities/drawing.dart';
 import 'package:paint_app/domain/entities/sketch.dart';
 
 class AnimationPreviewController {
-  Duration _frameDuration = Duration(milliseconds: 400);
+  Duration _frameDuration = Duration(milliseconds: 250);
   Sketch _sketch;
   int _drawingToShow = 0;
 

@@ -19,8 +19,12 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
       : super(DrawingInitial(
             currentDrawing: Drawing(
               canvasPaths: [],
+              sketchId: '',
             ),
-            previousDrawing: Drawing(canvasPaths: [])));
+            previousDrawing: Drawing(
+              canvasPaths: [],
+              sketchId: '',
+            )));
 
   @override
   Stream<DrawingState> mapEventToState(

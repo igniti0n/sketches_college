@@ -18,7 +18,7 @@ class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
 
   final DrawingsRepository drawingsRepository;
   AnimationBloc(this.drawingsRepository)
-      : super(AnimationInitial(Drawing(canvasPaths: []))) {
+      : super(AnimationInitial(Drawing(canvasPaths: [], sketchId: ''))) {
     _streamSubscription =
         _animationPreviewController.generateFrameCall().listen((drawing) {
       this.add(ChangeFrame(drawing));

@@ -4,6 +4,7 @@ import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
 import 'package:paint_app/view/painter_screen/settings_bloc/settings_bloc.dart';
 import 'package:paint_app/view/painter_screen/widgets/app_painter.dart';
 
+//!¨curretnly not used jbg
 class AnimationPreview extends StatelessWidget {
   const AnimationPreview({Key? key}) : super(key: key);
 
