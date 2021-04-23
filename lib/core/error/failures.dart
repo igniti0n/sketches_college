@@ -4,4 +4,4 @@ class DatabaseFailure extends Failure {}
 
 class StorageFailure extends Failure {}
 
-class SketchNotFoundFailure extends Failure {}
+class NotFoundFailure extends Failure {}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
+import '../painter_screen/drawing_bloc/drawing_bloc.dart';
 
 import '../painter_screen/settings_bloc/settings_bloc.dart';
 

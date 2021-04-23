@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:paint_app/view/options_screen/widgets/settings_menu_button.dart';
-import 'package:paint_app/view/overlay_screens/overlay_bloc/overlay_bloc.dart';
+import '../options_screen/widgets/settings_menu_button.dart';
+import '../overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
 
 import '../../contants.dart';

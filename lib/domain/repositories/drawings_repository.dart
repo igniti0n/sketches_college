@@ -1,28 +1,33 @@
 import 'dart:ui';
 
 import 'package:dartz/dartz.dart';
-import 'package:paint_app/core/error/failures.dart';
-import 'package:paint_app/domain/entities/canvas_path.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
-import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
+
+import '../../core/error/failures.dart';
+import '../../data/models/drawing_model.dart';
+import '../entities/canvas_path.dart';
+import '../entities/drawing.dart';
 
 abstract class DrawingsRepository {
-  Future<Either<Failure, List<Drawing>>> getDrawings();
+  Future<Either<Failure, void>> getDrawings(String sketchId);
 
-  Future<void> storeDrawings(List<Drawing> drawings);
+  Future<Either<Failure, void>> storeDrawing();
+  Future<Either<Failure, int>> deleteDrawing();
+
+  Future<Either<Failure, void>> duplicateDrawing();
+  Future<Either<Failure, void>> updateDrawing();
 
   get currentSketch;
 
-  void setInitialDrawings(Sketch sketch);
   void updateLastCanvasPath(CanvasPath updatedCanvasPath);
   void addNewCanvasPath(CanvasPath newCanvasPath);
   void removeLastCanvasPath();
 
-  void nextDrawing();
+  Future<Either<Failure, void>> nextDrawing();
   void previousDrawing();
 
-  void duplicateDrawing();
-  void changeBackgroundColorOfCurrentDrawing(Color color);
-  void deleteDrawing();
+  Drawing getCurrentDrawing();
+  Drawing getPreviousDrawing();
+
+  //void changeBackgroundColorOfCurrentDrawing(Color color);
+
 }

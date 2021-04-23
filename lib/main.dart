@@ -3,7 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fullscreen/fullscreen.dart';
-import 'package:paint_app/view/animation_preview_screen/animation_bloc/animation_bloc.dart';
+import 'package:paint_app/data/datasources/database_source.dart';
+import 'view/animation_preview_screen/animation_bloc/animation_bloc.dart';
 
 import 'core/navigation/router.dart';
 import 'data/repositories/drawings_repository_impl.dart';
@@ -26,8 +27,10 @@ void main() {
   runApp(MyApp());
 }
 
-final SketchesRepositoryImpl _sketchesRepositoryImpl = SketchesRepositoryImpl();
-final DrawingsRepositoryImpl _drawingsRepositoryImpl = DrawingsRepositoryImpl();
+final SketchesRepositoryImpl _sketchesRepositoryImpl =
+    SketchesRepositoryImpl(DatabaseSourceImpl.dbSource);
+final DrawingsRepositoryImpl _drawingsRepositoryImpl =
+    DrawingsRepositoryImpl(DatabaseSourceImpl.dbSource);
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

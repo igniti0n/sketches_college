@@ -41,9 +41,10 @@ class ShowColorPicker extends OverlayEvent {
 }
 
 class EditSketch extends OverlayEvent {
-  final Sketch editedSketch;
+  final String name;
+  final String id;
 
-  EditSketch(this.editedSketch);
+  EditSketch(this.name, this.id);
 }
 
 class DeleteSketch extends OverlayEvent {

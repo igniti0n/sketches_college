@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
-import 'package:paint_app/domain/repositories/drawings_repository.dart';
-import 'package:paint_app/view/animation_preview_screen/widgets/animation_preview_controller.dart';
+import '../../../domain/entities/drawing.dart';
+import '../../../domain/entities/sketch.dart';
+import '../../../domain/repositories/drawings_repository.dart';
+import '../widgets/animation_preview_controller.dart';
 
 part 'animation_event.dart';
 part 'animation_state.dart';
@@ -18,7 +18,8 @@ class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
 
   final DrawingsRepository drawingsRepository;
   AnimationBloc(this.drawingsRepository)
-      : super(AnimationInitial(Drawing(canvasPaths: [], sketchId: ''))) {
+      : super(
+            AnimationInitial(Drawing(canvasPaths: [], sketchId: '', id: ''))) {
     _streamSubscription =
         _animationPreviewController.generateFrameCall().listen((drawing) {
       this.add(ChangeFrame(drawing));

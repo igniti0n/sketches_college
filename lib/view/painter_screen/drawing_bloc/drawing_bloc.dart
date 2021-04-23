@@ -2,29 +2,28 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:paint_app/data/repositories/drawings_repository_impl.dart';
-import 'package:paint_app/domain/entities/canvas_path.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
+import 'package:paint_app/core/error/failures.dart';
+import 'package:paint_app/domain/repositories/drawings_repository.dart';
+import '../../../data/repositories/drawings_repository_impl.dart';
+import '../../../domain/entities/canvas_path.dart';
+import '../../../domain/entities/drawing.dart';
+import '../../../domain/entities/sketch.dart';
 
 part 'drawing_event.dart';
 part 'drawing_state.dart';
 
 class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
-  final DrawingsRepositoryImpl _drawingsRepositoryImpl;
+  final DrawingsRepository _drawingsRepositoryImpl;
   DrawingBloc(this._drawingsRepositoryImpl)
-      : super(DrawingInitial(
-            currentDrawing: Drawing(
-              canvasPaths: [],
-              sketchId: '',
-            ),
-            previousDrawing: Drawing(
-              canvasPaths: [],
-              sketchId: '',
-            )));
+      : super(
+          DrawingInitial(
+              currentDrawing: Drawing(canvasPaths: [], sketchId: '', id: ''),
+              previousDrawing: Drawing(canvasPaths: [], sketchId: '', id: '')),
+        );
 
   @override
   Stream<DrawingState> mapEventToState(
@@ -38,27 +37,49 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
 
     if (event is UpdateDrawing) {
       _drawingsRepositoryImpl.updateLastCanvasPath(event.canvasPath);
+      yield _success();
     } else if (event is StartDrawing) {
       _drawingsRepositoryImpl.addNewCanvasPath(event.canvasPath);
+      yield _success();
     } else if (event is Undo) {
       _drawingsRepositoryImpl.removeLastCanvasPath();
-    } else if (event is NextDrawing) {
-      _drawingsRepositoryImpl.nextDrawing();
+      yield _success();
     } else if (event is PreviousDrawing) {
       _drawingsRepositoryImpl.previousDrawing();
+      yield _success();
+    } else if (event is NextDrawing) {
+      final either = await _drawingsRepositoryImpl.nextDrawing();
+      yield _yieldState(either, 'Failed to add new drawing.');
+      yield _success();
     } else if (event is DuplicateDrawing) {
-      _drawingsRepositoryImpl.duplicateDrawing();
+      final either = await _drawingsRepositoryImpl.duplicateDrawing();
+      yield _yieldState(either, 'Failed to duplicate the drawing.');
     } else if (event is DeleteDrawing) {
-      _drawingsRepositoryImpl.deleteDrawing();
+      final either = await _drawingsRepositoryImpl.deleteDrawing();
+      yield _yieldState(either, 'Failed to delete drawing from database.');
     } else if (event is ScreenOpened) {
-      _drawingsRepositoryImpl.setInitialDrawings(event.sketch);
-    } else if (event is BackgroundColorChanged) {
+      final either = await _drawingsRepositoryImpl.getDrawings(event.sketchId);
+      yield _yieldState(either, 'Failed to fetch drawings from database.');
+    }
+    /*   else if (event is BackgroundColorChanged) {
       _drawingsRepositoryImpl
           .changeBackgroundColorOfCurrentDrawing(event.color);
-    }
-    yield DrawingLoaded(
-      currentDrawing: _drawingsRepositoryImpl.getCurrentDrawing(),
-      previousDrawing: _drawingsRepositoryImpl.getPreviousDrawing(),
-    );
+    }*/
   }
+
+  DrawingState _yieldState<A>(Either<Failure, A> either, String errorMessage) {
+    return either.fold<DrawingState>(
+        (fail) => _failure(errorMessage), (_) => _success());
+  }
+
+  DrawingState _failure(String message) => Error(
+        currentDrawing: _drawingsRepositoryImpl.getCurrentDrawing(),
+        previousDrawing: _drawingsRepositoryImpl.getPreviousDrawing(),
+        message: message,
+      );
+
+  DrawingState _success() => DrawingLoaded(
+        currentDrawing: _drawingsRepositoryImpl.getCurrentDrawing(),
+        previousDrawing: _drawingsRepositoryImpl.getPreviousDrawing(),
+      );
 }

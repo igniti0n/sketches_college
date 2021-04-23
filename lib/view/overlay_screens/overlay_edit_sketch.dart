@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
-import 'package:paint_app/view/home_screen/sketches_bloc/sketches_bloc.dart';
+import '../../domain/entities/sketch.dart';
+import '../home_screen/sketches_bloc/sketches_bloc.dart';
 import 'package:paint_app/view/overlay_screens/overlay_bloc/overlay_bloc.dart'
     as ob;
 
@@ -116,11 +116,8 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
         TextButton(
             onPressed: () {
               BlocProvider.of<ob.OverlayBloc>(context).add(ob.EditSketch(
-                Sketch(
-                  drawings: widget.editingSketch.drawings,
-                  id: widget.editingSketch.id,
-                  sketchName: _sketchName,
-                ),
+                _sketchName,
+                widget.editingSketch.id,
               ));
             },
             child: Text("Done")),

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
+import '../../../domain/entities/drawing.dart';
+import '../../../domain/entities/sketch.dart';
 
 class AnimationPreviewController {
   Duration _frameDuration = Duration(milliseconds: 250);

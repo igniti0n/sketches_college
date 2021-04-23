@@ -28,6 +28,18 @@ class DrawingLoading extends DrawingState {
         );
 }
 
+class Error extends DrawingState {
+  final String message;
+  Error({
+    required Drawing currentDrawing,
+    required Drawing previousDrawing,
+    required this.message,
+  }) : super(
+          currentDrawing: currentDrawing,
+          previousDrawing: previousDrawing,
+        );
+}
+
 class DrawingLoaded extends DrawingState {
   DrawingLoaded(
       {required Drawing currentDrawing, required Drawing previousDrawing})

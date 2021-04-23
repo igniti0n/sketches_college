@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:paint_app/core/extensions/offset_extension.dart';
-import 'package:paint_app/core/extensions/paint_extension.dart';
-import 'package:paint_app/domain/entities/canvas_path.dart';
+import '../../core/extensions/offset_extension.dart';
+import '../../core/extensions/paint_extension.dart';
+import '../../domain/entities/canvas_path.dart';
 
 class CanvasPathModel extends CanvasPath {
   CanvasPathModel({required List<Offset> drawPoints, required Paint paint})

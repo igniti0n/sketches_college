@@ -8,9 +8,9 @@ abstract class DrawingEvent extends Equatable {
 }
 
 class ScreenOpened extends DrawingEvent {
-  final Sketch sketch;
+  final String sketchId;
 
-  ScreenOpened(this.sketch);
+  ScreenOpened(this.sketchId);
 }
 
 class SaveDrawing extends DrawingEvent {}

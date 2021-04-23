@@ -4,8 +4,8 @@ import 'package:vector_math/vector_math.dart' as vm;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:paint_app/core/utils/paint_from.dart';
-import 'package:paint_app/domain/entities/canvas_path.dart';
+import '../../../core/utils/paint_from.dart';
+import '../../../domain/entities/canvas_path.dart';
 
 import '../../../domain/entities/drawing.dart';
 

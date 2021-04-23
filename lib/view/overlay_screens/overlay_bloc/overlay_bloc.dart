@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
-import 'package:paint_app/domain/repositories/sketches_repository.dart';
-import 'package:paint_app/view/overlay_screens/overlay_color_picker.screen.dart';
-import 'package:paint_app/view/overlay_screens/overlay_edit_sketch.dart';
+import '../../../domain/entities/sketch.dart';
+import '../../../domain/repositories/sketches_repository.dart';
+import '../overlay_color_picker.screen.dart';
+import '../overlay_edit_sketch.dart';
 
 part 'overlay_event.dart';
 part 'overlay_state.dart';
@@ -34,7 +35,7 @@ class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
       yield OverlayColorPickerStarted();
     } else if (event is EditSketch) {
       yield OverlayLoading();
-      final either = await _sketchesRepository.editSketch(event.editedSketch);
+      final either = await _sketchesRepository.editSketch(event.name, event.id);
       yield either.fold((l) => OverlayError('Editing failed to complete.'),
           (r) => OverlaySuccess('Editing completed successfully!'));
     } else if (event is DeleteSketch) {

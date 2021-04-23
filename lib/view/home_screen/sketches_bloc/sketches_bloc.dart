@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:paint_app/core/error/failures.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
-import 'package:paint_app/domain/repositories/sketches_repository.dart';
+import '../../../core/error/failures.dart';
+import '../../../domain/entities/drawing.dart';
+import '../../../domain/entities/sketch.dart';
+import '../../../domain/repositories/sketches_repository.dart';
 
 part 'sketches_event.dart';
 part 'sketches_state.dart';

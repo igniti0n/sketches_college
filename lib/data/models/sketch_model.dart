@@ -1,5 +1,5 @@
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
+import '../../domain/entities/drawing.dart';
+import '../../domain/entities/sketch.dart';
 
 import 'drawing_model.dart';
 

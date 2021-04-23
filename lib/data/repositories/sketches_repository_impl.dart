@@ -1,34 +1,38 @@
 import 'dart:developer';
 
-import 'package:paint_app/data/models/sketch_model.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/domain/entities/sketch.dart';
-import 'package:paint_app/core/error/failures.dart';
+import 'package:paint_app/data/datasources/database_source.dart';
+
+import '../models/sketch_model.dart';
+import '../../domain/entities/drawing.dart';
+import '../../domain/entities/sketch.dart';
+import '../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:paint_app/domain/repositories/sketches_repository.dart';
+import '../../domain/repositories/sketches_repository.dart';
 
 class SketchesRepositoryImpl extends SketchesRepository {
+  final DatabaseSource _databaseSource;
+  SketchesRepositoryImpl(this._databaseSource);
   //!treba mi samo prvi drawing sketcha z aprikaz na home screenu
   List<SketchModel> _userSketches = [
     SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'prvi')],
+        drawings: [Drawing(canvasPaths: [], sketchId: 'prvi', id: '1')],
         id: "prvi",
         sketchName: "prvi"),
     SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'drugi')],
+        drawings: [Drawing(canvasPaths: [], sketchId: 'drugi', id: '2')],
         id: "drugi",
         sketchName: "drugi"),
     SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'treci')],
+        drawings: [Drawing(canvasPaths: [], sketchId: 'treci', id: '3')],
         id: "treci",
         sketchName: "treci"),
     SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'cetvrti')],
+        drawings: [Drawing(canvasPaths: [], sketchId: 'cetvrti', id: '4')],
         id: "cetvrti",
         sketchName: "cetvrti"),
   ];
 
-  @override
+  /* @override
   Either<Failure, Sketch> getSketch(String id) {
     try {
       return Right(
@@ -36,61 +40,67 @@ class SketchesRepositoryImpl extends SketchesRepository {
     } catch (error) {
       return Left(SketchNotFoundFailure());
     }
-  }
-
-  //TODO: IMPLEMENT DB IN ALL THIS
+  }*/
 
   @override
-  Future<Either<Failure, List<Sketch>>> deleteSketch(String id) async {
+  Future<Either<Failure, void>> deleteSketch(String id) async {
     try {
+      await _databaseSource.deleteSketch(id);
       _userSketches.removeWhere((element) => element.id == id);
 
-      return Future.microtask(() => Right(_userSketches));
+      return Future.microtask(() => Right(null));
     } catch (error) {
-      return Left(SketchNotFoundFailure());
+      return Left(DatabaseFailure());
     }
   }
 
   @override
   Future<Either<Failure, List<Sketch>>> getSketches() async {
     try {
-      // _userSketches.forEach((element) => log(element.sketchName));
-      return Future.microtask(() => Right(_userSketches));
+      final List<SketchModel> result =
+          await _databaseSource.getSketchesFromDatabase();
+      _userSketches = result;
+      return Right(result);
     } catch (error) {
-      return Left(SketchNotFoundFailure());
+      return Left(DatabaseFailure());
     }
   }
 
   @override
   Future<Either<Failure, List<Sketch>>> addNewSketch() async {
     try {
-      _userSketches.add(SketchModel(
+      final SketchModel _newSketch = SketchModel(
           sketchName: 'new sketch',
           drawings: [],
-          id: DateTime.now().toIso8601String()));
-      return Future.microtask(() => Right(_userSketches));
+          id: DateTime.now().toIso8601String());
+
+      await _databaseSource.addNewSketch(_newSketch);
+
+      _userSketches.add(_newSketch);
+      return Right(_userSketches);
     } catch (error) {
-      return Left(SketchNotFoundFailure());
+      return Left(DatabaseFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> editSketch(Sketch newSketch) async {
+  Future<Either<Failure, void>> editSketch(String newName, String id) async {
     try {
-      final _index =
-          _userSketches.indexWhere((element) => element.id == newSketch.id);
-      if (_index == -1) return Left(SketchNotFoundFailure());
-      _userSketches[_index] = SketchModel(
-        sketchName: newSketch.sketchName,
-        drawings: newSketch.drawings,
-        id: newSketch.id,
-      ); //TODO: IMPLEMENT BP UPDATE
-      // log(_index.toString());
-      _userSketches.forEach((element) => log(element.sketchName));
-      log(_userSketches[_index].sketchName);
+      final _index = _userSketches.indexWhere((element) => element.id == id);
+      if (_index == -1) return Left(NotFoundFailure());
+
+      final SketchModel _updatedSketch = SketchModel(
+        sketchName: newName,
+        drawings: _userSketches[_index].drawings,
+        id: id,
+      );
+      final int res = await _databaseSource.updateSketch(_updatedSketch);
+      if (res == 0) return Left(NotFoundFailure());
+      _userSketches[_index] = _updatedSketch;
+
       return Future.microtask(() => Right(null));
     } catch (error) {
-      return Left(SketchNotFoundFailure());
+      return Left(NotFoundFailure());
     }
   }
 }

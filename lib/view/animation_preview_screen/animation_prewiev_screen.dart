@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_app/view/options_screen/widgets/settings_menu_button.dart';
-import 'package:paint_app/view/painter_screen/widgets/app_painter.dart';
+import '../options_screen/widgets/settings_menu_button.dart';
+import '../painter_screen/widgets/app_painter.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
 
 import '../../contants.dart';
