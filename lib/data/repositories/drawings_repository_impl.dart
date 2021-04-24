@@ -3,12 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import '../datasources/database_source.dart';
-import 'package:sqflite/sqflite.dart';
 import '../models/canvas_path_model.dart';
 import '../models/drawing_model.dart';
-import '../models/sketch_model.dart';
-import '../../domain/entities/sketch.dart';
-import '../../domain/entities/canvas_path.dart';
 import '../../domain/entities/drawing.dart';
 import '../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
@@ -43,7 +39,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
       final List<DrawingModel> _res =
           await _databaseSource.getDrawingsFromDatabase(sketchId);
-      log("drawings from DB: " + _res.toString());
+      // log("drawings from DB: " + _res.toString());
       if (_res.isNotEmpty) {
         _res.sort(
             (a, b) => DateTime.parse(a.id).compareTo(DateTime.parse(b.id)));
@@ -63,6 +59,19 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
     }
 
     //return Future.delayed(Duration.zero, () => Right(_currentDrawings.drawings));
+  }
+
+  @override
+  Future<Either<Failure, void>> saveDrawing() async {
+    try {
+      await _databaseSource
+          .updateDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
+
+      return Right(null);
+    } catch (err) {
+      log(err.toString());
+      return Left(DatabaseFailure());
+    }
   }
 
   @override
@@ -91,7 +100,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
       return Right(null);
     } catch (err) {
-      _currentlyViewdSketch--;
+      // _currentlyViewdSketch--;
       log(err.toString());
       return Left(DatabaseFailure());
     }
@@ -123,10 +132,10 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
           _currentDrawings.elementAt(_currentlyViewdSketch).id,
         );
         _currentDrawings.removeAt(_currentlyViewdSketch);
-        if (_currentlyViewdSketch == 0)
-          _currentlyViewdSketch++;
-        else
+        if (_currentlyViewdSketch == _currentDrawings.length)
           _currentlyViewdSketch--;
+        //   _currentlyViewdSketch++;
+        // else
       }
       return Right(res);
     } catch (err) {
@@ -192,11 +201,6 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
       return _currentDrawings.elementAt(_currentlyViewdSketch - 1);
     else
       return getCurrentDrawing();
-  }
-
-  @override
-  Future<Either<Failure, void>> storeDrawing() async {
-    throw UnimplementedError();
   }
 
   /*@override

@@ -53,25 +53,28 @@ class _SettingsPickerState extends State<SettingsPicker> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      log('tapped');
-                      print(
-                          'seafgersgergergergergergergergergergergergergergergergergergerger');
                       BlocProvider.of<OverlayBloc>(context).add(ShowColorPicker(
                           currentColor:
                               Colors.green, //state.paintSettings.color,
                           context: context));
                     },
-                    child: BlocBuilder<SettingsBloc, SettingsState>(
-                      builder: (context, state) {
-                        return Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                              color: Colors.green, // state.paintSettings.color,
-                              border: Border.all(color: Colors.white)),
-                        );
-                      },
-                    ),
+                    child: BlocConsumer<DrawingBloc, DrawingState>(
+                        builder: (context, state) {
+                      return Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.green, // state.paintSettings.color,
+                            border: Border.all(color: Colors.white)),
+                      );
+                    }, listener: (ctx, state) {
+                      if (state is Error) {
+                        log('ERROR HAPPEND!!!!');
+                        BlocProvider.of<OverlayBloc>(context).add(
+                            ShowErrorOverlay(
+                                context: ctx, message: state.message));
+                      }
+                    }),
                   ),
 
                   //  TextButton(
@@ -136,8 +139,8 @@ class _SettingsPickerState extends State<SettingsPicker> {
                 ),
                 Expanded(
                   child: SettingsMenuButton(
-                      onTap: () => Navigator.of(context)
-                          .pushReplacementNamed(HOME_SCREEN_ROUTE),
+                      onTap: () => BlocProvider.of<DrawingBloc>(context)
+                          .add(ScreenExit(context)),
                       text: 'Back',
                       splashColor: purpleBar),
                 ),

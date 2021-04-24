@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:math' as math;
-import 'package:vector_math/vector_math.dart' as vm;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';

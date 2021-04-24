@@ -28,6 +28,16 @@ class ShowDeleteOverlay extends OverlayEvent {
   });
 }
 
+class ShowErrorOverlay extends OverlayEvent {
+  final String message;
+  final BuildContext context;
+
+  ShowErrorOverlay({
+    required this.context,
+    required this.message,
+  });
+}
+
 class ShowColorPicker extends OverlayEvent {
   final Color currentColor;
   final BuildContext context;

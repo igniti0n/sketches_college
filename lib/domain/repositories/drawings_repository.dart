@@ -8,7 +8,7 @@ import '../entities/drawing.dart';
 abstract class DrawingsRepository {
   Future<Either<Failure, void>> getDrawings(String sketchId);
 
-  Future<Either<Failure, void>> storeDrawing();
+  Future<Either<Failure, void>> saveDrawing();
   Future<Either<Failure, int>> deleteDrawing();
 
   Future<Either<Failure, void>> duplicateDrawing();

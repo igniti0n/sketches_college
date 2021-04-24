@@ -4,7 +4,9 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:paint_app/core/navigation/router.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/repositories/drawings_repository.dart';
 import '../../../domain/entities/drawing.dart';
@@ -58,6 +60,12 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
     } else if (event is ScreenOpened) {
       final either = await _drawingsRepositoryImpl.getDrawings(event.sketchId);
       yield _yieldState(either, 'Failed to fetch drawings from database.');
+    } else if (event is ScreenExit) {
+      final either = await _drawingsRepositoryImpl.saveDrawing();
+      if (either.isRight())
+        Navigator.of(event.context).pushReplacementNamed(HOME_SCREEN_ROUTE);
+
+      yield _yieldState(either, 'Failed to save drawing.');
     }
     /*   else if (event is BackgroundColorChanged) {
       _drawingsRepositoryImpl

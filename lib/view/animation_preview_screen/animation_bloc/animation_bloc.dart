@@ -12,12 +12,14 @@ part 'animation_state.dart';
 
 class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
   AnimationPreviewController _animationPreviewController =
-      AnimationPreviewController(Sketch(drawings: [], id: '', sketchName: ''));
+      AnimationPreviewController(
+    [],
+  );
 
   late StreamSubscription _streamSubscription;
 
-  final DrawingsRepository drawingsRepository;
-  AnimationBloc(this.drawingsRepository)
+  final DrawingsRepository _drawingsRepository;
+  AnimationBloc(this._drawingsRepository)
       : super(
             AnimationInitial(Drawing(canvasPaths: [], sketchId: '', id: ''))) {
     _streamSubscription =
@@ -31,7 +33,7 @@ class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
     AnimationEvent event,
   ) async* {
     if (event is ScreenStarted) {
-      _animationPreviewController.setSkecth(drawingsRepository.currentSketch);
+      _animationPreviewController.setSkecth(_drawingsRepository.currentSketch);
     } else if (event is ChangeFrame) {
       yield DrawingPresented(event.drawing);
     } else if (event is ChangeFps) {

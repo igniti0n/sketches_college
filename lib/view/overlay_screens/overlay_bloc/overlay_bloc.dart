@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:paint_app/view/overlay_screens/overlay_error.dart';
 import '../../../domain/entities/sketch.dart';
 import '../../../domain/repositories/sketches_repository.dart';
 import '../overlay_color_picker.screen.dart';
@@ -33,6 +34,9 @@ class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
       showColorPicker(event.context, event.currentColor,
           isForBackground: event.isForBackground);
       yield OverlayColorPickerStarted();
+    } else if (event is ShowErrorOverlay) {
+      showErrorDialog(event.context, event.message);
+      yield OverlayInitial();
     } else if (event is EditSketch) {
       yield OverlayLoading();
       final either = await _sketchesRepository.editSketch(event.name, event.id);

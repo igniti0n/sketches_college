@@ -13,8 +13,13 @@ class ScreenOpened extends DrawingEvent {
   ScreenOpened(this.sketchId);
 }
 
-//!drawing actions
+class ScreenExit extends DrawingEvent {
+  final BuildContext context;
 
+  ScreenExit(this.context);
+}
+
+//!drawing actions
 class SaveDrawing extends DrawingEvent {}
 
 class PreviousDrawing extends DrawingEvent {}
