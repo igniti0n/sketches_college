@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import '../../core/extensions/offset_extension.dart';
@@ -12,12 +13,14 @@ class CanvasPathModel extends CanvasPath {
         );
 
   factory CanvasPathModel.fromMap(Map<String, dynamic> map) {
-    return CanvasPathModel(
-      drawPoints: (map['drawPoints'] as List<Map<String, dynamic>>)
+    final _newCanvasPath = CanvasPathModel(
+      drawPoints: (map['drawPoints'] as List<dynamic>)
           .map((offsetMap) => JsonParsing.fromMap(offsetMap))
           .toList(),
       paint: JsonParsingPaint.fromMap(map['paint']),
     );
+    _newCanvasPath.createPathFromOffsets();
+    return _newCanvasPath;
   }
 
   Map<String, dynamic> toMap() {

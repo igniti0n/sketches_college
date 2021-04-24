@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -8,13 +7,13 @@ import 'package:flutter/material.dart';
 part 'settings_event.dart';
 part 'settings_state.dart';
 
-final Paint DEFAULT_PAINT = Paint()
+final Paint defaultPaint = Paint()
   ..color = Colors.black
   ..strokeWidth = 2;
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  Paint _currentPaint = DEFAULT_PAINT;
-  SettingsBloc() : super(SettingsInitial(DEFAULT_PAINT));
+  Paint _currentPaint = defaultPaint;
+  SettingsBloc() : super(SettingsInitial(defaultPaint));
 
   Paint _paintFrom(Paint paint) {
     return Paint()

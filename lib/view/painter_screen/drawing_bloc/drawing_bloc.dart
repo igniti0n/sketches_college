@@ -4,14 +4,10 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:paint_app/core/error/failures.dart';
-import 'package:paint_app/domain/repositories/drawings_repository.dart';
-import '../../../data/repositories/drawings_repository_impl.dart';
-import '../../../domain/entities/canvas_path.dart';
+import '../../../core/error/failures.dart';
+import '../../../domain/repositories/drawings_repository.dart';
 import '../../../domain/entities/drawing.dart';
-import '../../../domain/entities/sketch.dart';
 
 part 'drawing_event.dart';
 part 'drawing_state.dart';
@@ -29,28 +25,30 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
   Stream<DrawingState> mapEventToState(
     DrawingEvent event,
   ) async* {
-    //  log("DRAWING event:" + event.toString());
+    log("DRAWING event:" + event.toString());
     yield DrawingLoading(
       currentDrawing: _drawingsRepositoryImpl.getCurrentDrawing(),
       previousDrawing: _drawingsRepositoryImpl.getPreviousDrawing(),
     );
 
     if (event is UpdateDrawing) {
-      _drawingsRepositoryImpl.updateLastCanvasPath(event.canvasPath);
+      _drawingsRepositoryImpl.updateLastCanvasPath(event.offset);
       yield _success();
     } else if (event is StartDrawing) {
-      _drawingsRepositoryImpl.addNewCanvasPath(event.canvasPath);
+      _drawingsRepositoryImpl.addNewCanvasPath(event.paint, event.offset);
+      yield _success();
+    } else if (event is EndDrawing) {
+      _drawingsRepositoryImpl.updateLaseCanvasPathOnPanEd();
       yield _success();
     } else if (event is Undo) {
       _drawingsRepositoryImpl.removeLastCanvasPath();
       yield _success();
     } else if (event is PreviousDrawing) {
-      _drawingsRepositoryImpl.previousDrawing();
-      yield _success();
+      final either = await _drawingsRepositoryImpl.previousDrawing();
+      yield _yieldState(either, 'Failed to update.');
     } else if (event is NextDrawing) {
       final either = await _drawingsRepositoryImpl.nextDrawing();
-      yield _yieldState(either, 'Failed to add new drawing.');
-      yield _success();
+      yield _yieldState(either, 'Failed to update drawing.');
     } else if (event is DuplicateDrawing) {
       final either = await _drawingsRepositoryImpl.duplicateDrawing();
       yield _yieldState(either, 'Failed to duplicate the drawing.');

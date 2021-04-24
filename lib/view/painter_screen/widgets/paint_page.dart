@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/native/image_saver.dart';
-import '../../../domain/entities/canvas_path.dart';
 import '../settings_bloc/settings_bloc.dart';
 import 'app_painter.dart';
 import '../drawing_bloc/drawing_bloc.dart';
@@ -61,30 +60,12 @@ class _PaintCanvasState extends State<PaintCanvas> {
     ..strokeWidth = 1
     ..color = Colors.black;
 
-  CanvasPath _newPath = CanvasPath(
-    paint: Paint()
-      ..strokeWidth = 1
-      ..color = Colors.black,
-    drawPoints: [],
-  );
-
   void _addPoint(Offset newPoint) {
-    _newPath.quadric(
-      newPoint.dx,
-      newPoint.dy,
-    );
-    _newPath.drawPoints.add(newPoint);
-    BlocProvider.of<DrawingBloc>(context).add(UpdateDrawing(_newPath));
+    BlocProvider.of<DrawingBloc>(context).add(UpdateDrawing(newPoint));
   }
 
   void _addLastPoint() {
-    final Offset _lastOffset = _newPath.drawPoints.last;
-
-    final Offset _additionalOffset =
-        Offset(_lastOffset.dx + 10, _lastOffset.dy + 10);
-
-    _newPath.drawPoints.add(_additionalOffset);
-    BlocProvider.of<DrawingBloc>(context).add(UpdateDrawing(_newPath));
+    BlocProvider.of<DrawingBloc>(context).add(EndDrawing());
   }
 
   Paint _paintFrom(Paint paint) {
@@ -96,8 +77,6 @@ class _PaintCanvasState extends State<PaintCanvas> {
       ..shader = paint.shader;
   }
 
-  // final GlobalKey gk = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
@@ -105,6 +84,9 @@ class _PaintCanvasState extends State<PaintCanvas> {
 
     return BlocBuilder<DrawingBloc, DrawingState>(
       builder: (context, state) {
+        log(state.runtimeType.toString() +
+            '    ' +
+            state.currentDrawing.canvasPaths.length.toString());
         return RepaintBoundary(
           child: CustomPaint(
             key: globalKey,
@@ -123,15 +105,11 @@ class _PaintCanvasState extends State<PaintCanvas> {
               },
               child: GestureDetector(
                 onPanStart: (det) {
-                  _newPath = CanvasPath(
-                      paint: _paintFrom(_currentPaintSettings),
-                      drawPoints: [
-                        det.localPosition,
-                      ]);
-                  _newPath.movePathTo(
-                      det.localPosition.dx, det.localPosition.dy);
-
-                  _drawingBloc.add(StartDrawing(_newPath));
+                  _drawingBloc.add(StartDrawing(
+                    //TODO: state.paintSettings instead?
+                    paint: _paintFrom(_currentPaintSettings),
+                    offset: det.localPosition,
+                  ));
                 },
                 onPanUpdate: (det) => _addPoint(
                   Offset(det.localPosition.dx, det.localPosition.dy),

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../../core/error/failures.dart';
-import '../../../domain/entities/drawing.dart';
 import '../../../domain/entities/sketch.dart';
 import '../../../domain/repositories/sketches_repository.dart';
 
@@ -11,6 +10,7 @@ part 'sketches_event.dart';
 part 'sketches_state.dart';
 
 const String ERROR_LOADING_SKETCHES = 'Error whiel loading your sketches.';
+const String ERROR_ADDING_SKETCH = 'Error while adding new sketch.';
 
 class SketchesBloc extends Bloc<SketchesEvent, SketchesState> {
   final SketchesRepository _sketchesRepository;
@@ -21,7 +21,7 @@ class SketchesBloc extends Bloc<SketchesEvent, SketchesState> {
     SketchesEvent event,
   ) async* {
     if (event is FetchAllSketches) {
-      yield LoadingSketches([]);
+      yield LoadingSketches(_sketchesRepository.currentSketches);
       final either = await _sketchesRepository.getSketches();
       yield either.fold(
         (Failure failure) => Error(
@@ -36,7 +36,7 @@ class SketchesBloc extends Bloc<SketchesEvent, SketchesState> {
       yield either.fold(
         (Failure failure) => Error(
           [],
-          ERROR_LOADING_SKETCHES,
+          ERROR_ADDING_SKETCH,
         ),
         (List<Sketch> sketches) => SketchesLoaded(sketches),
       );

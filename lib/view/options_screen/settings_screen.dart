@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../contants.dart';
-import 'widgets/animation_preview.dart';
 import 'widgets/settings_menu.dart';
 
 class OptionsScreen extends StatelessWidget {

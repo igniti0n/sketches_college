@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
-import '../../data/models/drawing_model.dart';
-import '../entities/canvas_path.dart';
 import '../entities/drawing.dart';
 
 abstract class DrawingsRepository {
@@ -14,16 +12,17 @@ abstract class DrawingsRepository {
   Future<Either<Failure, int>> deleteDrawing();
 
   Future<Either<Failure, void>> duplicateDrawing();
-  Future<Either<Failure, void>> updateDrawing();
+  // Future<Either<Failure, void>> updateDrawing();
 
   get currentSketch;
 
-  void updateLastCanvasPath(CanvasPath updatedCanvasPath);
-  void addNewCanvasPath(CanvasPath newCanvasPath);
+  void updateLastCanvasPath(Offset offset, {bool isLast = false});
+  void updateLaseCanvasPathOnPanEd();
+  void addNewCanvasPath(Paint paint, Offset offset);
   void removeLastCanvasPath();
 
   Future<Either<Failure, void>> nextDrawing();
-  void previousDrawing();
+  Future<Either<Failure, void>> previousDrawing();
 
   Drawing getCurrentDrawing();
   Drawing getPreviousDrawing();

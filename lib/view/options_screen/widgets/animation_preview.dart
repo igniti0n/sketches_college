@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../painter_screen/drawing_bloc/drawing_bloc.dart';
-import '../../painter_screen/settings_bloc/settings_bloc.dart';
 import '../../painter_screen/widgets/app_painter.dart';
 
 //!¨curretnly not used jbg
@@ -11,7 +10,7 @@ class AnimationPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final _size = MediaQuery.of(context).size;
-    final _drawingBloc = BlocProvider.of<DrawingBloc>(context);
+    // final _drawingBloc = BlocProvider.of<DrawingBloc>(context);
 
     return BlocBuilder<DrawingBloc, DrawingState>(
       builder: (context, state) {

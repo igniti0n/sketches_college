@@ -10,9 +10,7 @@ import '../../../core/navigation/router.dart';
 import '../../../domain/entities/sketch.dart';
 import '../../painter_screen/drawing_bloc/drawing_bloc.dart';
 import '../home_screen.dart';
-import '../sketches_bloc/sketches_bloc.dart';
 import 'sketch_button.dart';
-import 'sketch_painter.dart';
 
 class SketchWidget extends StatelessWidget {
   final Sketch sketch;
@@ -26,7 +24,7 @@ class SketchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final _sketchBloc = BlocProvider.of<SketchesBloc>(context);
-    final _orientation = MediaQuery.of(context).orientation;
+    // final _orientation = MediaQuery.of(context).orientation;
 
     return GestureDetector(
       onTap: () {
@@ -42,15 +40,15 @@ class SketchWidget extends StatelessWidget {
               // Transform.scale(
               //   scale: 1, //_orientation == Orientation.portrait ? 1 : 0.6,
               //   child:
-              CustomPaint(
-                willChange: false,
-                isComplex: false,
-                painter: SketchPainter(sketch.drawings.first.canvasPaths,
-                    _orientation == Orientation.landscape),
-                child: Container(
-                    // color: Colors.green,
-                    ),
-              ),
+              // CustomPaint(
+              //   willChange: false,
+              //   isComplex: false,
+              //   painter: SketchPainter(sketch.drawings.first.canvasPaths,
+              //       _orientation == Orientation.landscape),
+              //   child: Container(
+              //       // color: Colors.green,
+              //       ),
+              // ),
               // ),
               Container(
                 color: Colors.grey.withAlpha(150),

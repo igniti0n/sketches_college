@@ -13,6 +13,8 @@ class ScreenOpened extends DrawingEvent {
   ScreenOpened(this.sketchId);
 }
 
+//!drawing actions
+
 class SaveDrawing extends DrawingEvent {}
 
 class PreviousDrawing extends DrawingEvent {}
@@ -31,12 +33,19 @@ class BackgroundColorChanged extends DrawingEvent {
   BackgroundColorChanged(this.color);
 }
 
+//!press, drag and let go of screen
+class EndDrawing extends DrawingEvent {}
+
 class UpdateDrawing extends DrawingEvent {
-  final CanvasPath canvasPath;
-  const UpdateDrawing(this.canvasPath);
+  final Offset offset;
+  const UpdateDrawing(this.offset);
 }
 
 class StartDrawing extends DrawingEvent {
-  final CanvasPath canvasPath;
-  const StartDrawing(this.canvasPath);
+  final Offset offset;
+  final Paint paint;
+  const StartDrawing({
+    required this.offset,
+    required this.paint,
+  });
 }

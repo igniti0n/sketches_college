@@ -1,18 +1,20 @@
 import 'dart:ui';
 
+import 'color_extension.dart';
+
 extension JsonParsingPaint on Paint {
   Map<String, dynamic> toMap() {
     return {
       'strokeWidth': this.strokeWidth,
-      'color': this.color,
-      'blendMode': this.blendMode,
+      'color': JsonParsingColor(this.color).toMap(),
+      'blendMode': this.blendMode.index,
     };
   }
 
   static Paint fromMap(Map<String, dynamic> map) {
     return Paint()
-      ..color = map['color']
+      ..color = JsonParsingColor.fromMap(map['color'])
       ..strokeWidth = map['strokeWidth']
-      ..blendMode = map['blendMode'];
+      ..blendMode = BlendMode.values[map['blendMode']];
   }
 }

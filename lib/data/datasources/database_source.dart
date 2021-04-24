@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:paint_app/data/models/drawing_model.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
+import '../models/drawing_model.dart';
+import '../../domain/entities/drawing.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -29,24 +29,26 @@ class DatabaseSourceImpl extends DatabaseSource {
   DatabaseSourceImpl._();
 
   Future<Database> get database async {
-    if (db == null) await _initDb();
+    if (db == null) db = await _initDb();
     return db!;
   }
 
   _initDb() async {
+    // await deleteDatabase(join(await getDatabasesPath(), 'sketches.db'));
     return await openDatabase(
       join(await getDatabasesPath(), 'sketches.db'),
       onCreate: (db, version) async {
         await db.execute('''create table $sketchTable (
           id TEXT PRIMARY KEY,
-          sketchName TEXT not null,)
+          sketchName TEXT not null
+          )
         ''');
 
         await db.execute('''
        create table $drawingTable (
        canvasPaths TEXT not null,
        sketchId TEXT not null,
-       id TEXT not null,
+       id TEXT not null
        )''');
       },
       version: 1,
@@ -57,18 +59,21 @@ class DatabaseSourceImpl extends DatabaseSource {
   @override
   Future<void> addNewSketch(SketchModel newSketch) async {
     log(newSketch.toJson().toString());
-    await db!.insert(sketchTable, newSketch.toJson());
+    final db = await database;
+    await db.insert(sketchTable, newSketch.toJson());
   }
 
   @override
   Future<int> deleteSketch(String sketchId) async {
-    return await db!.delete(sketchTable, where: 'id=?', whereArgs: [sketchId]);
+    final db = await database;
+    return await db.delete(sketchTable, where: 'id=?', whereArgs: [sketchId]);
   }
 
   @override
   Future<List<SketchModel>> getSketchesFromDatabase() async {
-    final result = await db!.query(sketchTable);
-    log(result.toString());
+    final db = await database;
+    final result = await db.query(sketchTable, orderBy: 'id ASC');
+    log('from DB:' + result.toString());
     return result
         .map((Map<String, Object?> sketch) => SketchModel.fromJson(sketch))
         .toList();
@@ -76,7 +81,8 @@ class DatabaseSourceImpl extends DatabaseSource {
 
   @override
   Future<int> updateSketch(SketchModel updatedSketch) async {
-    return await db!.update(sketchTable, updatedSketch.toJson(),
+    final db = await database;
+    return await db.update(sketchTable, updatedSketch.toJson(),
         where: 'id=?', whereArgs: [updatedSketch.id]);
   }
 
@@ -85,28 +91,34 @@ class DatabaseSourceImpl extends DatabaseSource {
   @override
   Future<void> addNewDrawing(DrawingModel newDrawing) async {
     log('adding drawing:' + newDrawing.toMap().toString());
-    await db!.insert(drawingTable, newDrawing.toMap());
+    final db = await database;
+    await db.insert(drawingTable, newDrawing.toMap());
   }
 
   @override
   Future<int> deleteDrawing(String drawingId) async {
-    return await db!
-        .delete(drawingTable, where: 'id=?', whereArgs: [drawingId]);
+    final db = await database;
+    return await db.delete(drawingTable, where: 'id=?', whereArgs: [drawingId]);
   }
 
   @override
   Future<List<DrawingModel>> getDrawingsFromDatabase(String sketchId) async {
-    final result = await db!.query(drawingTable,
-        where: 'sketchId=?', whereArgs: [sketchId], orderBy: 'id ASC');
-    return result
-        .map((Map<String, Object?> drawing) => DrawingModel.fromJson(drawing))
-        .toList();
+    final db = await database;
+    final result = await db
+        .query(drawingTable, where: 'sketchId=?', whereArgs: [sketchId]);
+    // log('query from db' + result.toString());
+    final list = result.map((Map<String, Object?> drawing) {
+      return DrawingModel.fromJson(drawing);
+    }).toList();
+    return list;
   }
 
   @override
   Future<int> updateDrawing(DrawingModel updatedDrawing) async {
     log('updating drawing:' + updatedDrawing.toMap().toString());
-    return await db!.update(
+    log('drawing id:    ' + updatedDrawing.id.toString());
+    final db = await database;
+    return await db.update(
       drawingTable,
       updatedDrawing.toMap(),
       where: 'id=?',

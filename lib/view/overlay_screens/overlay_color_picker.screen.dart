@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -7,6 +9,7 @@ import '../painter_screen/settings_bloc/settings_bloc.dart';
 
 Future<void> showColorPicker(BuildContext context, Color currentPaintColor,
     {bool isForBackground = false}) {
+  log('started');
   return showDialog(
     context: context,
     builder: (_) => ColorPickerWidget(

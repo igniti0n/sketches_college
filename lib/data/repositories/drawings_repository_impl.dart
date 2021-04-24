@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:paint_app/data/datasources/database_source.dart';
+import '../datasources/database_source.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/canvas_path_model.dart';
 import '../models/drawing_model.dart';
@@ -24,7 +24,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
     DrawingModel(
       sketchId: '4',
       canvasPaths: [CanvasPathModel(paint: Paint(), drawPoints: [])],
-      id: 'dummy id',
+      id: DateTime.now().toIso8601String(),
     ),
   ];
   String _currentSketchId = '4';
@@ -38,11 +38,27 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   @override
   Future<Either<Failure, void>> getDrawings(String sketchId) async {
     try {
+      _currentlyViewdSketch = 0;
+      _currentSketchId = sketchId;
+
       final List<DrawingModel> _res =
           await _databaseSource.getDrawingsFromDatabase(sketchId);
-      _currentDrawings = _res;
+      log("drawings from DB: " + _res.toString());
+      if (_res.isNotEmpty) {
+        _res.sort(
+            (a, b) => DateTime.parse(a.id).compareTo(DateTime.parse(b.id)));
+        _currentDrawings = _res;
+      } else
+        _currentDrawings = [
+          DrawingModel(
+            sketchId: sketchId,
+            canvasPaths: [CanvasPathModel(paint: Paint(), drawPoints: [])],
+            id: DateTime.now().toIso8601String(),
+          ),
+        ];
       return Right(null);
     } catch (err) {
+      log(err.toString());
       return Left(DatabaseFailure());
     }
 
@@ -50,15 +66,52 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateDrawing() async {
+  Future<Either<Failure, void>> nextDrawing() async {
     try {
       final res = await _databaseSource
           .updateDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
-      if (res == 0) return Left(NotFoundFailure());
+
+      //for the first drawing
+      if (res == 0)
+        await _databaseSource.addNewDrawing(
+          _currentDrawings.elementAt(_currentlyViewdSketch),
+        );
+
+      _currentlyViewdSketch++;
+      //no more drawings
+      if (_currentlyViewdSketch == _currentDrawings.length) {
+        final DrawingModel _newDrawing = DrawingModel(
+            canvasPaths: [],
+            sketchId: _currentSketchId,
+            id: DateTime.now().toIso8601String());
+
+        await _databaseSource.addNewDrawing(_newDrawing);
+        _currentDrawings.add(_newDrawing);
+      }
+
       return Right(null);
     } catch (err) {
+      _currentlyViewdSketch--;
+      log(err.toString());
       return Left(DatabaseFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, void>> previousDrawing() async {
+    try {
+      if (_currentlyViewdSketch > 0) {
+        await _databaseSource
+            .updateDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
+        _currentlyViewdSketch--;
+      }
+      return Right(null);
+    } catch (err) {
+      log(err.toString());
+      return Left(DatabaseFailure());
+    }
+
+    // log("DRAWING NO:$_currentlyViewdSketch");
   }
 
   @override
@@ -99,11 +152,12 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   }
 
   @override
-  void addNewCanvasPath(CanvasPath newCanvasPath) {
-    if (_canPreformAction())
-      _currentDrawings
-          .elementAt(_currentlyViewdSketch)
-          .addNewPath(newCanvasPath);
+  void addNewCanvasPath(Paint paint, Offset offset) {
+    if (_canPreformAction()) {
+      final _newPath = CanvasPathModel(drawPoints: [offset], paint: paint);
+      _newPath.movePathTo(offset.dx, offset.dy);
+      _currentDrawings.elementAt(_currentlyViewdSketch).addNewPath(_newPath);
+    }
   }
 
   @override
@@ -114,18 +168,22 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   }
 
   @override
-  void updateLastCanvasPath(CanvasPath updatedCanvasPath) {
+  void updateLastCanvasPath(Offset offset, {bool isLast = false}) {
+    if (_canPreformAction())
+      _currentDrawings.elementAt(_currentlyViewdSketch).updateLastPath(offset);
+  }
+
+  @override
+  void updateLaseCanvasPathOnPanEd() {
     if (_canPreformAction())
       _currentDrawings
           .elementAt(_currentlyViewdSketch)
-          .updateLastPath(updatedCanvasPath);
+          .updateLastPathOnPanEnd();
   }
 
   Drawing getCurrentDrawing() {
-    // log((_currentDrawings.drawings.elementAt(_currentlyViewdSketch)
-    //         )
-    //     .toMap()
-    //     .toString());
+    // log('drawings length: ' + _currentDrawings.length.toString());
+    // elementAt(_currentlyViewdSketch)).toMap().toString());
     return _currentDrawings.elementAt(_currentlyViewdSketch);
   }
 
@@ -134,35 +192,6 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
       return _currentDrawings.elementAt(_currentlyViewdSketch - 1);
     else
       return getCurrentDrawing();
-  }
-
-  @override
-  Future<Either<Failure, void>> nextDrawing() async {
-    try {
-      _currentlyViewdSketch++;
-      // log("DRAWING NO:$_currentlyViewdSketch");
-
-      if (_currentlyViewdSketch == _currentDrawings.length) {
-        final DrawingModel _newDrawing = DrawingModel(
-            canvasPaths: [],
-            sketchId: _currentSketchId,
-            id: DateTime.now().toIso8601String() + _currentSketchId);
-
-        await _databaseSource.addNewDrawing(_newDrawing);
-        _currentDrawings.add(_newDrawing);
-      }
-
-      return Right(null);
-    } catch (err) {
-      _currentlyViewdSketch--;
-      return Left(DatabaseFailure());
-    }
-  }
-
-  @override
-  void previousDrawing() {
-    if (_currentlyViewdSketch > 0) _currentlyViewdSketch--;
-    // log("DRAWING NO:$_currentlyViewdSketch");
   }
 
   @override

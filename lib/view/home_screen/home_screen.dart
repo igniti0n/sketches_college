@@ -25,14 +25,12 @@ class HomeScreen extends StatelessWidget {
         ),
         child: BlocBuilder<SketchesBloc, SketchesState>(
           builder: (context, state) {
-            // dev.log(state.toString());
-            if (state is LoadingSketches) {
-              return _buildLoading();
-            } else if (state is Error) {
+            // log(state.toString());
+            if (state is Error) {
               return Center(
                 child: Text(state.message),
               );
-            } else if (state is SketchesLoaded) {
+            } else {
               return GridView.builder(
                   itemCount: state.sketches.length,
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -43,7 +41,6 @@ class HomeScreen extends StatelessWidget {
                   itemBuilder: (ctx, index) =>
                       SketchWidget(sketch: state.sketches[index]));
             }
-            return _buildLoading();
           },
         ),
       ),

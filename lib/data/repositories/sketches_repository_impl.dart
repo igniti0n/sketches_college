@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:paint_app/data/datasources/database_source.dart';
+import '../datasources/database_source.dart';
 
 import '../models/sketch_model.dart';
 import '../../domain/entities/drawing.dart';
@@ -14,22 +14,22 @@ class SketchesRepositoryImpl extends SketchesRepository {
   SketchesRepositoryImpl(this._databaseSource);
   //!treba mi samo prvi drawing sketcha z aprikaz na home screenu
   List<SketchModel> _userSketches = [
-    SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'prvi', id: '1')],
-        id: "prvi",
-        sketchName: "prvi"),
-    SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'drugi', id: '2')],
-        id: "drugi",
-        sketchName: "drugi"),
-    SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'treci', id: '3')],
-        id: "treci",
-        sketchName: "treci"),
-    SketchModel(
-        drawings: [Drawing(canvasPaths: [], sketchId: 'cetvrti', id: '4')],
-        id: "cetvrti",
-        sketchName: "cetvrti"),
+    // SketchModel(
+    //     drawings: [Drawing(canvasPaths: [], sketchId: 'prvi', id: '1')],
+    //     id: "prvi",
+    //     sketchName: "prvi"),
+    // SketchModel(
+    //     drawings: [Drawing(canvasPaths: [], sketchId: 'drugi', id: '2')],
+    //     id: "drugi",
+    //     sketchName: "drugi"),
+    // SketchModel(
+    //     drawings: [Drawing(canvasPaths: [], sketchId: 'treci', id: '3')],
+    //     id: "treci",
+    //     sketchName: "treci"),
+    // SketchModel(
+    //     drawings: [Drawing(canvasPaths: [], sketchId: 'cetvrti', id: '4')],
+    //     id: "cetvrti",
+    //     sketchName: "cetvrti"),
   ];
 
   /* @override
@@ -41,6 +41,9 @@ class SketchesRepositoryImpl extends SketchesRepository {
       return Left(SketchNotFoundFailure());
     }
   }*/
+
+  @override
+  List<Sketch> get currentSketches => _userSketches;
 
   @override
   Future<Either<Failure, void>> deleteSketch(String id) async {
@@ -62,6 +65,7 @@ class SketchesRepositoryImpl extends SketchesRepository {
       _userSketches = result;
       return Right(result);
     } catch (error) {
+      log(error.toString());
       return Left(DatabaseFailure());
     }
   }
@@ -73,10 +77,11 @@ class SketchesRepositoryImpl extends SketchesRepository {
           sketchName: 'new sketch',
           drawings: [],
           id: DateTime.now().toIso8601String());
-
+      log(DateTime.now().toIso8601String());
       await _databaseSource.addNewSketch(_newSketch);
 
       _userSketches.add(_newSketch);
+
       return Right(_userSketches);
     } catch (error) {
       return Left(DatabaseFailure());

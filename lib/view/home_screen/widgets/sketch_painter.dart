@@ -11,8 +11,6 @@ class SketchPainter extends CustomPainter {
 
   SketchPainter(this._canvasPaths, this.isLandscape);
 
-  final _paint = Paint();
-
   @override
   void paint(Canvas canvas, Size size) {
     // log("PAINTING");

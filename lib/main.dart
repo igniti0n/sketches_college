@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fullscreen/fullscreen.dart';
-import 'package:paint_app/data/datasources/database_source.dart';
+import 'data/datasources/database_source.dart';
 import 'view/animation_preview_screen/animation_bloc/animation_bloc.dart';
 
 import 'core/navigation/router.dart';

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,6 +19,7 @@ class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
   Stream<OverlayState> mapEventToState(
     OverlayEvent event,
   ) async* {
+    // log(event.toString());
     if (event is ShowEditOverlay) {
       showEditSketchOverlay(event.context, event.sketch);
       yield OverlayEditSketchStarted();

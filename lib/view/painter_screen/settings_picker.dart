@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../options_screen/widgets/settings_menu_button.dart';
 import '../overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
@@ -52,20 +51,27 @@ class _SettingsPickerState extends State<SettingsPicker> {
             child: Column(
               children: [
                 Expanded(
-                  child: BlocBuilder<SettingsBloc, SettingsState>(
-                    builder: (context, state) {
-                      return GestureDetector(
-                        onTap: () => BlocProvider.of<OverlayBloc>(context).add(
-                            ShowColorPicker(
-                                currentColor: state.paintSettings.color,
-                                context: context)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: state.paintSettings.color,
-                              border: Border.all(color: Colors.white)),
-                        ),
-                      );
+                  child: GestureDetector(
+                    onTap: () {
+                      log('tapped');
+                      print(
+                          'seafgersgergergergergergergergergergergergergergergergergergerger');
+                      BlocProvider.of<OverlayBloc>(context).add(ShowColorPicker(
+                          currentColor:
+                              Colors.green, //state.paintSettings.color,
+                          context: context));
                     },
+                    child: BlocBuilder<SettingsBloc, SettingsState>(
+                      builder: (context, state) {
+                        return Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.green, // state.paintSettings.color,
+                              border: Border.all(color: Colors.white)),
+                        );
+                      },
+                    ),
                   ),
 
                   //  TextButton(

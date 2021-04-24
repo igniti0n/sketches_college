@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/navigation/router.dart';
 import '../../animation_preview_screen/animation_bloc/animation_bloc.dart';
-import '../../home_screen/sketches_bloc/sketches_bloc.dart';
-import '../../overlay_screens/overlay_bloc/overlay_bloc.dart';
-import '../../painter_screen/drawing_bloc/drawing_bloc.dart';
 
 import '../../../contants.dart';
 import 'settings_menu_button.dart';
