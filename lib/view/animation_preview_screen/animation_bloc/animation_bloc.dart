@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import '../../../domain/entities/drawing.dart';
 import '../../../domain/entities/sketch.dart';
 import '../../../domain/repositories/drawings_repository.dart';
@@ -20,13 +21,7 @@ class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
 
   final DrawingsRepository _drawingsRepository;
   AnimationBloc(this._drawingsRepository)
-      : super(
-            AnimationInitial(Drawing(canvasPaths: [], sketchId: '', id: ''))) {
-    _streamSubscription =
-        _animationPreviewController.generateFrameCall().listen((drawing) {
-      this.add(ChangeFrame(drawing));
-    });
-  }
+      : super(AnimationInitial(Drawing(canvasPaths: [], sketchId: '', id: '')));
 
   @override
   Stream<AnimationState> mapEventToState(
@@ -34,6 +29,11 @@ class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
   ) async* {
     if (event is ScreenStarted) {
       _animationPreviewController.setSkecth(_drawingsRepository.currentSketch);
+
+      _streamSubscription =
+          _animationPreviewController.initialStream().listen((drawing) {
+        this.add(ChangeFrame(drawing));
+      });
     } else if (event is ChangeFrame) {
       yield DrawingPresented(event.drawing);
     } else if (event is ChangeFps) {
@@ -44,6 +44,14 @@ class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
           _animationPreviewController.generateFrameCall().listen((drawing) {
         this.add(ChangeFrame(drawing));
       });
+    } else if (event is ScreenExited) {
+      await _streamSubscription.cancel();
+      Navigator.of(event.context).pop();
+      yield AnimationInitial(Drawing(
+        canvasPaths: [],
+        id: '',
+        sketchId: '',
+      ));
     }
   }
 }

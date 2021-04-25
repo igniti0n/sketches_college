@@ -19,6 +19,8 @@ class ScreenExit extends DrawingEvent {
   ScreenExit(this.context);
 }
 
+class RefreshScreen extends DrawingEvent {}
+
 //!drawing actions
 class SaveDrawing extends DrawingEvent {}
 
@@ -28,7 +30,7 @@ class NextDrawing extends DrawingEvent {}
 
 class DuplicateDrawing extends DrawingEvent {}
 
-class DeleteDrawing extends DrawingEvent {}
+// class DeleteDrawing extends DrawingEvent {}
 
 class Undo extends DrawingEvent {}
 

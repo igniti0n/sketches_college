@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../options_screen/widgets/settings_menu_button.dart';
+import '../../core/error/settings_menu_button.dart';
 import '../overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
 
@@ -23,131 +23,186 @@ class SettingsPicker extends StatefulWidget {
 class _SettingsPickerState extends State<SettingsPicker> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: medium,
-      child: Row(
-        children: [
-          Flexible(
-            flex: 1,
-            child: Column(
-              children: [
-                Flexible(
-                  flex: 7,
-                  child: StrokeSetting(),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: SettingsMenuButton(
-                      onTap: () => Navigator.of(context)
-                          .pushNamed(SETTINGS_SCREEN_ROUTE),
-                      text: '....',
-                      splashColor: purpleBar),
-                ),
-              ],
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: Column(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      BlocProvider.of<OverlayBloc>(context).add(ShowColorPicker(
-                          currentColor:
-                              Colors.green, //state.paintSettings.color,
-                          context: context));
-                    },
-                    child: BlocConsumer<DrawingBloc, DrawingState>(
-                        builder: (context, state) {
-                      return Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.green, // state.paintSettings.color,
-                            border: Border.all(color: Colors.white)),
-                      );
-                    }, listener: (ctx, state) {
-                      if (state is Error) {
-                        log('ERROR HAPPEND!!!!');
-                        BlocProvider.of<OverlayBloc>(context).add(
-                            ShowErrorOverlay(
-                                context: ctx, message: state.message));
-                      }
-                    }),
-                  ),
+    final _settingsBloc = BlocProvider.of<SettingsBloc>(context);
+    final _drawingBloc = BlocProvider.of<DrawingBloc>(context);
+    final _overlayBloc = BlocProvider.of<OverlayBloc>(context);
 
-                  //  TextButton(
-                  //   onPressed: () => BlocProvider.of<SettingsBloc>(context).add(
-                  //     SettingsChanged(
-                  //       Paint()
-                  //         ..color = Colors.red
-                  //         ..blendMode = BlendMode.srcOver,
-                  //     ),
-                  //   ),
-                  //   child: Text('crvena'),
-                  // ),
-                ),
-                Expanded(
-                  child: SettingsMenuButton(
-                      onTap: () => BlocProvider.of<SettingsBloc>(context).add(
-                            SettingsChanged(
-                              Paint()..blendMode = BlendMode.clear,
-                              // Paint()..color = Colors.white,
-                            ),
+    return BlocListener<DrawingBloc, DrawingState>(
+      listener: (ctx, state) {
+        if (state is Error)
+          _overlayBloc
+              .add(ShowErrorOverlay(context: ctx, message: state.message));
+      },
+      child: Container(
+        color: medium,
+        child: Column(
+          children: [
+            Flexible(
+              flex: 1,
+              child: BlocBuilder<SettingsBloc, SettingsState>(
+                builder: (ctx, state) => Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _settingsBloc.add(
+                          SettingsChanged(
+                            Paint()
+                              ..blendMode = BlendMode.clear
+                              ..color = state.paintSettings.color,
+                            // Paint()..color = Colors.white,
                           ),
-                      text: 'Erase',
-                      splashColor: purpleBar),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          padding: EdgeInsets.all(2),
+                          alignment: Alignment.bottomRight,
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(10, 255, 255, 255),
+                              border: Border.all(
+                                  color: state.paintSettings.blendMode ==
+                                          BlendMode.clear
+                                      ? purpleBar
+                                      : Colors.white,
+                                  width: 4)),
+                          child: Placeholder(),
+                        ),
+                      ),
+
+                      //  TextButton(
+                      //   onPressed: () => BlocProvider.of<SettingsBloc>(context).add(
+                      //     SettingsChanged(
+                      //       Paint()
+                      //         ..color = Colors.red
+                      //         ..blendMode = BlendMode.srcOver,
+                      //     ),
+                      //   ),
+                      //   child: Text('crvena'),
+                      // ),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          _overlayBloc.add(ShowColorPicker(
+                              currentColor:
+                                  Colors.green, //state.paintSettings.color,
+                              context: context));
+                        },
+                        child: Container(
+                          // width: double.infinity,
+                          // height: double.infinity,
+
+                          decoration: BoxDecoration(
+                              color: state.paintSettings.color,
+                              border: Border.all(
+                                  color: state.paintSettings.blendMode ==
+                                          BlendMode.clear
+                                      ? Colors.white
+                                      : purpleBar,
+                                  width: 4)),
+                        ),
+                      ),
+                    ),
+
+                    //  TextButton(
+                    //   onPressed: () => BlocProvider.of<SettingsBloc>(context).add(
+                    //     SettingsChanged(
+                    //       Paint()
+                    //         ..color = Colors.red
+                    //         ..blendMode = BlendMode.srcOver,
+                    //     ),
+                    //   ),
+                    //   child: Text('crvena'),
+                    // ),
+                  ],
                 ),
-                Expanded(
-                  child: SettingsMenuButton(
-                      onTap: () => BlocProvider.of<DrawingBloc>(context)
-                          .add(DuplicateDrawing()),
-                      text: 'Dup',
-                      splashColor: purpleBar),
-                ),
-                Expanded(
-                  child: SettingsMenuButton(
-                      onTap: () => BlocProvider.of<DrawingBloc>(context)
-                          .add(DeleteDrawing()),
-                      text: 'Del',
-                      splashColor: purpleBar),
-                ),
-                Expanded(
-                  child: SettingsMenuButton(
-                      onTap: () => BlocProvider.of<DrawingBloc>(context).add(
-                            Undo(),
-                          ),
-                      text: 'Undo',
-                      splashColor: purpleBar),
-                ),
-                Expanded(
-                  child: SettingsMenuButton(
-                      onTap: () => BlocProvider.of<DrawingBloc>(context).add(
-                            NextDrawing(),
-                          ),
-                      text: 'Next',
-                      splashColor: purpleBar),
-                ),
-                Expanded(
-                  child: SettingsMenuButton(
-                      onTap: () => BlocProvider.of<DrawingBloc>(context).add(
-                            PreviousDrawing(),
-                          ),
-                      text: 'Prev',
-                      splashColor: purpleBar),
-                ),
-                Expanded(
-                  child: SettingsMenuButton(
-                      onTap: () => BlocProvider.of<DrawingBloc>(context)
-                          .add(ScreenExit(context)),
-                      text: 'Back',
-                      splashColor: purpleBar),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Flexible(
+              flex: 7,
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        Flexible(
+                          flex: 7,
+                          child: StrokeSetting(),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: SettingsMenuButton(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(SETTINGS_SCREEN_ROUTE),
+                              icon: Icons.more_horiz,
+                              splashColor: purpleBar),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SettingsMenuButton(
+                              onTap: () {
+                                _drawingBloc.add(DuplicateDrawing());
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text('Drawing duplicated!'),
+                                ));
+                              },
+                              icon: Icons.control_point_duplicate,
+                              splashColor: purpleBar),
+                        ),
+                        Expanded(
+                          child: SettingsMenuButton(
+                              onTap: () => _overlayBloc.add(
+                                  ShowDeleteDrawingOverlay(context: context)),
+                              icon: Icons.remove_circle_outline,
+                              splashColor: purpleBar),
+                        ),
+                        Expanded(
+                          child: SettingsMenuButton(
+                              onTap: () => _drawingBloc.add(
+                                    Undo(),
+                                  ),
+                              icon: Icons.undo,
+                              splashColor: purpleBar),
+                        ),
+                        Expanded(
+                          child: SettingsMenuButton(
+                              onTap: () => _drawingBloc.add(
+                                    NextDrawing(),
+                                  ),
+                              icon: Icons.skip_next,
+                              splashColor: purpleBar),
+                        ),
+                        Expanded(
+                          child: SettingsMenuButton(
+                              onTap: () => _drawingBloc.add(
+                                    PreviousDrawing(),
+                                  ),
+                              icon: Icons.skip_previous,
+                              splashColor: purpleBar),
+                        ),
+                        Expanded(
+                          child: SettingsMenuButton(
+                              onTap: () =>
+                                  _drawingBloc.add(ScreenExit(context)),
+                              icon: Icons.exit_to_app,
+                              splashColor: purpleBar),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -174,7 +229,7 @@ class _StrokeSettingState extends State<StrokeSetting> {
         tooltipPosition: sl.SliderTooltipPosition.right,
         interval: 44,
         onChanged: (newStrokeWidth) {
-          log(newStrokeWidth.toString());
+          // log(newStrokeWidth.toString());
           setState(() => _currentSliderValue = newStrokeWidth);
           _settingsBloc.add(SettingsStrokeWidthChanged(_currentSliderValue));
         });

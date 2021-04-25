@@ -4,6 +4,7 @@ class SketchButton extends StatelessWidget {
   final double maxWidth;
   final IconData icon;
   final Color splashColor;
+  final Color? iconColor;
   final Function() onTap;
   const SketchButton({
     Key? key,
@@ -11,6 +12,7 @@ class SketchButton extends StatelessWidget {
     required this.onTap,
     required this.icon,
     required this.splashColor,
+    this.iconColor,
   }) : super(key: key);
 
   @override
@@ -29,12 +31,13 @@ class SketchButton extends StatelessWidget {
           borderOnForeground: false,
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => Future.delayed(Duration(milliseconds: 240), onTap),
+            onTap: () => Future.delayed(Duration(milliseconds: 150), onTap),
             splashColor: splashColor,
             borderRadius: BorderRadius.all(Radius.circular(100)),
             child: Icon(
               icon,
               size: maxWidth / 4,
+              color: iconColor,
             ),
           ),
         ),

@@ -15,6 +15,12 @@ class ChangeFrame extends AnimationEvent {
 
 class ScreenStarted extends AnimationEvent {}
 
+class ScreenExited extends AnimationEvent {
+  final BuildContext context;
+
+  ScreenExited(this.context);
+}
+
 class ChangeFps extends AnimationEvent {
   final double fps;
 

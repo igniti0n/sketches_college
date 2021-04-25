@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../options_screen/widgets/settings_menu_button.dart';
+import '../../core/error/settings_menu_button.dart';
 import '../painter_screen/widgets/app_painter.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
 
@@ -35,7 +35,10 @@ class AnimationPreviewScreen extends StatelessWidget {
                           children: [
                             Expanded(child: SpeedSetting()),
                             SettingsMenuButton(
-                                onTap: () => Navigator.of(context).pop(),
+                                onTap: () {
+                                  BlocProvider.of<AnimationBloc>(context)
+                                      .add(ScreenExited(context));
+                                },
                                 text: 'Back',
                                 splashColor: purpleBar),
                             SizedBox(
@@ -87,10 +90,10 @@ class _StrokeSettingState extends State<SpeedSetting> {
         value: _fps,
         stepSize: 1.0,
         min: 1.0,
-        max: 60.0,
+        max: 30.0,
         enableTooltip: true,
         tooltipPosition: sl.SliderTooltipPosition.right,
-        interval: 60.0,
+        interval: 30.0,
         onChanged: (newFps) {
           // log(newStrokeWidth.toString());
           setState(() => _fps = newFps);

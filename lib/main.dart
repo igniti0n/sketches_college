@@ -48,7 +48,8 @@ class MyApp extends StatelessWidget {
                 create: (_) => SketchesBloc(_sketchesRepositoryImpl),
               ),
               BlocProvider<OverlayBloc>(
-                create: (_) => OverlayBloc(_sketchesRepositoryImpl),
+                create: (_) => OverlayBloc(
+                    _sketchesRepositoryImpl, _drawingsRepositoryImpl),
               ),
               BlocProvider<SettingsBloc>(
                 create: (_) => SettingsBloc(),
@@ -68,7 +69,9 @@ class MyApp extends StatelessWidget {
                       bodyText1: TextStyle(
                     fontSize: 20,
                     color: Colors.blue,
-                  ))),
+                  )),
+                  iconTheme: IconThemeData(color: Colors.blue)),
+
               onGenerateRoute: onGenerateRoute,
             ),
           );

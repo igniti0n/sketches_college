@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:paint_app/view/overlay_screens/overlay_error.dart';
+import 'package:paint_app/domain/repositories/drawings_repository.dart';
+import 'package:paint_app/view/overlay_screens/overlay_delete_drawing.dart';
+import '../overlay_error.dart';
 import '../../../domain/entities/sketch.dart';
 import '../../../domain/repositories/sketches_repository.dart';
 import '../overlay_color_picker.screen.dart';
@@ -14,7 +16,9 @@ part 'overlay_state.dart';
 
 class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
   final SketchesRepository _sketchesRepository;
-  OverlayBloc(this._sketchesRepository) : super(OverlayInitial());
+  final DrawingsRepository _drawingsRepository;
+  OverlayBloc(this._sketchesRepository, this._drawingsRepository)
+      : super(OverlayInitial());
 
   @override
   Stream<OverlayState> mapEventToState(
@@ -24,8 +28,11 @@ class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
     if (event is ShowEditOverlay) {
       showEditSketchOverlay(event.context, event.sketch);
       yield OverlayEditSketchStarted();
-    } else if (event is ShowDeleteOverlay) {
+    } else if (event is ShowDeleteSketchOverlay) {
       showEditSketchOverlay(event.context, event.sketch);
+      yield OverlayDeleteSketchStarted();
+    } else if (event is ShowDeleteDrawingOverlay) {
+      showDeleteDrawingDialog(event.context);
       yield OverlayDeleteSketchStarted();
     } else if (event is ExitOverlay) {
       Navigator.of(event.context).pop();
@@ -46,6 +53,11 @@ class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
       yield OverlayLoading();
       final either = await _sketchesRepository.deleteSketch(event.sketchId);
       yield either.fold((l) => OverlayError('Deleting sketch failed.'),
+          (r) => OverlaySuccess('Deleting completed successfully!'));
+    } else if (event is DeleteDrawing) {
+      yield OverlayLoading();
+      final either = await _drawingsRepository.deleteDrawing();
+      yield either.fold((l) => OverlayError('Deleting drawing failed.'),
           (r) => OverlaySuccess('Deleting completed successfully!'));
     }
   }

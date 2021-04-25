@@ -8,8 +8,8 @@ part 'settings_event.dart';
 part 'settings_state.dart';
 
 final Paint defaultPaint = Paint()
-  ..color = Colors.black
-  ..strokeWidth = 2;
+  ..color = Colors.pink
+  ..strokeWidth = 4;
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Paint _currentPaint = defaultPaint;
@@ -30,14 +30,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async* {
     //log("SETTINGS event:" + event.toString());
     if (event is SettingsChanged) {
-      yield SettingsLoading(_currentPaint);
+      // yield SettingsLoading(_currentPaint);
       _currentPaint = _paintFrom(event.paint)
         ..strokeWidth = _currentPaint.strokeWidth;
       yield SettingsLoaded(_currentPaint);
     } else if (event is SettingsStrokeWidthChanged) {
-      if (_currentPaint.strokeWidth + event.strokeWidth != 0)
-        _currentPaint..strokeWidth = event.strokeWidth;
-      yield SettingsLoading(_currentPaint);
+      // if (_currentPaint.strokeWidth + event.strokeWidth != 0)
+      _currentPaint..strokeWidth = event.strokeWidth;
+      // yield SettingsLoading(_currentPaint);
       yield SettingsLoaded(_currentPaint);
     }
     // else if (event is SettingsColorChanged) {

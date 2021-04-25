@@ -84,8 +84,9 @@ class SketchWidget extends StatelessWidget {
                             child: SketchButton(
                               icon: Icons.remove_circle,
                               splashColor: Colors.red[900]!,
+                              iconColor: Colors.black,
                               onTap: () => BlocProvider.of<OverlayBloc>(context)
-                                  .add(ShowDeleteOverlay(
+                                  .add(ShowDeleteSketchOverlay(
                                       sketch: sketch, context: context)),
                               maxWidth: cons.maxWidth,
                             ),

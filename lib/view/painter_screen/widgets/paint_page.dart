@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_app/domain/entities/drawing.dart';
 
 import '../../../core/native/image_saver.dart';
 import '../settings_bloc/settings_bloc.dart';
@@ -13,8 +14,6 @@ class PaintPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _deviceSize = MediaQuery.of(context).size;
-
-    log(_deviceSize.width.toString());
 
     return Scaffold(
       body: SizedBox(
@@ -56,18 +55,6 @@ class PaintCanvas extends StatefulWidget {
 }
 
 class _PaintCanvasState extends State<PaintCanvas> {
-  Paint _currentPaintSettings = Paint()
-    ..strokeWidth = 1
-    ..color = Colors.black;
-
-  void _addPoint(Offset newPoint) {
-    BlocProvider.of<DrawingBloc>(context).add(UpdateDrawing(newPoint));
-  }
-
-  void _addLastPoint() {
-    BlocProvider.of<DrawingBloc>(context).add(EndDrawing());
-  }
-
   Paint _paintFrom(Paint paint) {
     return Paint()
       ..color = paint.color
@@ -84,47 +71,67 @@ class _PaintCanvasState extends State<PaintCanvas> {
 
     return BlocBuilder<DrawingBloc, DrawingState>(
       builder: (context, state) {
-        log(state.runtimeType.toString() +
-            '    ' +
-            state.currentDrawing.canvasPaths.length.toString());
-        return RepaintBoundary(
-          child: CustomPaint(
-            key: globalKey,
-            isComplex: true,
-            willChange: true,
-            foregroundPainter: AppPainter(
-              drawing: state.currentDrawing,
-            ),
-            painter: AppPainter(
-              drawing: state.previousDrawing,
-              isForeground: false,
-            ),
-            child: BlocListener<SettingsBloc, SettingsState>(
-              listener: (context, state) {
-                _currentPaintSettings = state.paintSettings;
-              },
-              child: GestureDetector(
-                onPanStart: (det) {
-                  _drawingBloc.add(StartDrawing(
-                    //TODO: state.paintSettings instead?
-                    paint: _paintFrom(_currentPaintSettings),
-                    offset: det.localPosition,
-                  ));
-                },
-                onPanUpdate: (det) => _addPoint(
-                  Offset(det.localPosition.dx, det.localPosition.dy),
+        // log(state.runtimeType.toString() +
+        //     '    ' +
+        //     state.currentDrawing.canvasPaths.length.toString());
+        return Stack(
+          children: [
+            CustomPaint(
+              isComplex: false,
+              willChange: false,
+              painter: AppPainter(
+                drawing: (state.currentDrawing.id == state.previousDrawing.id)
+                    ? Drawing(canvasPaths: [], sketchId: '', id: '')
+                    : state.previousDrawing,
+                isForeground: false,
+                isFirstPage:
+                    state.currentDrawing.id == state.previousDrawing.id,
+              ),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: _size.height,
+                  maxWidth: _size.width,
                 ),
-                onPanEnd: (det) => _addLastPoint(),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxHeight: _size.height,
-                    maxWidth: _size.width,
+                color: Colors.transparent,
+              ),
+            ),
+            RepaintBoundary(
+              child: CustomPaint(
+                key: globalKey,
+                isComplex: true,
+                willChange: true,
+                foregroundPainter: AppPainter(
+                  drawing: state.currentDrawing,
+                ),
+                // painter: AppPainter(
+                //   drawing: state.previousDrawing,
+                //   isForeground: false,
+                // ),
+                child: GestureDetector(
+                  onPanStart: (det) {
+                    _drawingBloc.add(StartDrawing(
+                      paint: _paintFrom(BlocProvider.of<SettingsBloc>(context)
+                          .state
+                          .paintSettings),
+                      offset: det.localPosition,
+                    ));
+                  },
+                  onPanUpdate: (det) => _drawingBloc.add(
+                    UpdateDrawing(
+                        Offset(det.localPosition.dx, det.localPosition.dy)),
                   ),
-                  color: Colors.transparent,
+                  onPanEnd: (det) => _drawingBloc.add(EndDrawing()),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxHeight: _size.height,
+                      maxWidth: _size.width,
+                    ),
+                    color: Colors.transparent,
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         );
       },
     );

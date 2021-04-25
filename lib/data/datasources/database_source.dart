@@ -73,7 +73,7 @@ class DatabaseSourceImpl extends DatabaseSource {
   Future<List<SketchModel>> getSketchesFromDatabase() async {
     final db = await database;
     final result = await db.query(sketchTable, orderBy: 'id ASC');
-    log('from DB:' + result.toString());
+    // log('from DB:' + result.toString());
     return result
         .map((Map<String, Object?> sketch) => SketchModel.fromJson(sketch))
         .toList();
@@ -90,7 +90,7 @@ class DatabaseSourceImpl extends DatabaseSource {
 
   @override
   Future<void> addNewDrawing(DrawingModel newDrawing) async {
-    log('adding drawing:' + newDrawing.toMap().toString());
+    // log('adding drawing:' + newDrawing.toMap().toString());
     final db = await database;
     await db.insert(drawingTable, newDrawing.toMap());
   }
@@ -115,8 +115,8 @@ class DatabaseSourceImpl extends DatabaseSource {
 
   @override
   Future<int> updateDrawing(DrawingModel updatedDrawing) async {
-    log('updating drawing:' + updatedDrawing.toMap().toString());
-    log('drawing id:    ' + updatedDrawing.id.toString());
+    // log('updating drawing:' + updatedDrawing.toMap().toString());
+    // log('drawing id:    ' + updatedDrawing.id.toString());
     final db = await database;
     return await db.update(
       drawingTable,

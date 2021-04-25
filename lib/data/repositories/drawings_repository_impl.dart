@@ -39,7 +39,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
       final List<DrawingModel> _res =
           await _databaseSource.getDrawingsFromDatabase(sketchId);
-      // log("drawings from DB: " + _res.toString());
+      log("drawings from DB: " + _res.toString());
       if (_res.isNotEmpty) {
         _res.sort(
             (a, b) => DateTime.parse(a.id).compareTo(DateTime.parse(b.id)));
@@ -79,7 +79,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
     try {
       final res = await _databaseSource
           .updateDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
-
+      log(res.toString());
       //for the first drawing
       if (res == 0)
         await _databaseSource.addNewDrawing(
@@ -87,6 +87,10 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
         );
 
       _currentlyViewdSketch++;
+
+      log((_currentlyViewdSketch == _currentDrawings.length).toString());
+      log(_currentlyViewdSketch.toString());
+      log(_currentDrawings.length.toString());
       //no more drawings
       if (_currentlyViewdSketch == _currentDrawings.length) {
         final DrawingModel _newDrawing = DrawingModel(
@@ -127,6 +131,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   Future<Either<Failure, int>> deleteDrawing() async {
     try {
       int res = 0;
+
       if (_currentDrawings.length > 1) {
         res = await _databaseSource.deleteDrawing(
           _currentDrawings.elementAt(_currentlyViewdSketch).id,
@@ -136,6 +141,12 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
           _currentlyViewdSketch--;
         //   _currentlyViewdSketch++;
         // else
+      } else {
+        _currentDrawings[_currentlyViewdSketch] = DrawingModel(
+          canvasPaths: [],
+          sketchId: _currentSketchId,
+          id: _currentDrawings.elementAt(_currentlyViewdSketch).id,
+        );
       }
       return Right(res);
     } catch (err) {
@@ -148,12 +159,16 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   @override
   Future<Either<Failure, void>> duplicateDrawing() async {
     try {
-      await _databaseSource
-          .addNewDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
+      final DrawingModel _newDrawing = DrawingModel(
+        canvasPaths:
+            List.from(_currentDrawings[_currentlyViewdSketch].canvasPaths),
+        sketchId: _currentSketchId,
+        id: DateTime.now().toIso8601String(),
+      );
+      await _databaseSource.addNewDrawing(_newDrawing);
       _currentlyViewdSketch++;
       // log("inserting at $_currentlyViewdSketch");
-      _currentDrawings.insert(_currentlyViewdSketch,
-          _currentDrawings.elementAt(_currentlyViewdSketch - 1));
+      _currentDrawings.insert(_currentlyViewdSketch, _newDrawing);
       return Right(null);
     } catch (err) {
       return Left(DatabaseFailure());
@@ -171,7 +186,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
   @override
   void removeLastCanvasPath() {
-    if (_canPreformAction()) {
+    if (_currentlyViewdSketch >= 0) {
       _currentDrawings.elementAt(_currentlyViewdSketch).removeLastPath();
     }
   }

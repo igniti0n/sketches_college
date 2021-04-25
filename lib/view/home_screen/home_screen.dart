@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../overlay_screens/overlay_bloc/overlay_bloc.dart';
 
 import '../../contants.dart';
 import 'sketches_bloc/sketches_bloc.dart';
@@ -23,24 +24,39 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(40)),
           color: medium,
         ),
-        child: BlocBuilder<SketchesBloc, SketchesState>(
-          builder: (context, state) {
+        child: BlocConsumer<SketchesBloc, SketchesState>(
+          builder: (ctx, state) {
             // log(state.toString());
-            if (state is Error) {
+            if (state.sketches.isEmpty && state is SketchesLoaded) {
               return Center(
-                child: Text(state.message),
+                child: Text(
+                  'Add some sketches to get started!',
+                  style: Theme.of(ctx).textTheme.bodyText1,
+                ),
               );
             } else {
               return GridView.builder(
                   itemCount: state.sketches.length,
+                  //  +
+                  // ((state is LoadingSketches) ? 1 : 0),
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: _deviceSize.width /
                           ((_mediaQuery.orientation == Orientation.landscape)
                               ? 3
                               : 2)),
-                  itemBuilder: (ctx, index) =>
-                      SketchWidget(sketch: state.sketches[index]));
+                  itemBuilder: (ctx, index) {
+                    // if ((state is LoadingSketches) &&
+                    //     index == state.sketches.length) return _buildLoading();
+                    return SketchWidget(sketch: state.sketches[index]);
+                  });
             }
+          },
+          listener: (ctx, state) {
+            if (state is Error)
+              BlocProvider.of<OverlayBloc>(context).add(ShowErrorOverlay(
+                context: ctx,
+                message: state.message,
+              ));
           },
         ),
       ),
@@ -54,12 +70,6 @@ class HomeScreen extends StatelessWidget {
           size: 40,
         ),
       ),
-    );
-  }
-
-  Center _buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(),
     );
   }
 }

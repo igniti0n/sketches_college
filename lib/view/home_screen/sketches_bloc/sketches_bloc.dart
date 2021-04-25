@@ -9,7 +9,7 @@ import '../../../domain/repositories/sketches_repository.dart';
 part 'sketches_event.dart';
 part 'sketches_state.dart';
 
-const String ERROR_LOADING_SKETCHES = 'Error whiel loading your sketches.';
+const String ERROR_LOADING_SKETCHES = 'Error while loading your sketches.';
 const String ERROR_ADDING_SKETCH = 'Error while adding new sketch.';
 
 class SketchesBloc extends Bloc<SketchesEvent, SketchesState> {
@@ -25,17 +25,17 @@ class SketchesBloc extends Bloc<SketchesEvent, SketchesState> {
       final either = await _sketchesRepository.getSketches();
       yield either.fold(
         (Failure failure) => Error(
-          [],
+          _sketchesRepository.currentSketches,
           ERROR_LOADING_SKETCHES,
         ),
         (List<Sketch> sketches) => SketchesLoaded(sketches),
       );
     } else if (event is AddNewSketch) {
-      yield LoadingSketches([]);
+      yield LoadingSketches(_sketchesRepository.currentSketches);
       final either = await _sketchesRepository.addNewSketch();
       yield either.fold(
         (Failure failure) => Error(
-          [],
+          _sketchesRepository.currentSketches,
           ERROR_ADDING_SKETCH,
         ),
         (List<Sketch> sketches) => SketchesLoaded(sketches),

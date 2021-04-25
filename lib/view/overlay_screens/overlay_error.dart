@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../contants.dart';
+import '../../core/error/settings_menu_button.dart';
 
 import 'overlay_bloc/overlay_bloc.dart';
 
@@ -23,16 +25,20 @@ class ErrorDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Error occured!'),
+      backgroundColor: overlayBackground,
+      title: const Text(
+        'Error occured!',
+        textAlign: TextAlign.center,
+      ),
       content: SingleChildScrollView(
         child: Text('Unfortunatelly, \n' + message),
       ),
       actions: <Widget>[
-        TextButton(
-          child: const Text('Got it'),
-          onPressed: () {
-            BlocProvider.of<OverlayBloc>(context).add(ExitOverlay(context));
-          },
+        SettingsMenuButton(
+          onTap: () =>
+              BlocProvider.of<OverlayBloc>(context).add(ExitOverlay(context)),
+          splashColor: purpleBar,
+          text: 'Got it',
         ),
       ],
     );

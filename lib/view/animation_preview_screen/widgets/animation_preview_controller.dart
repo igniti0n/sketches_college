@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import '../../../domain/entities/drawing.dart';
 
@@ -11,6 +12,7 @@ class AnimationPreviewController {
   AnimationPreviewController(this._sketch) {
     _drawingStream = Stream.periodic(_frameDuration, (_) {
       _drawingToShow++;
+      log('lol');
       if (_drawingToShow == _sketch.length) _drawingToShow = 0;
       return _sketch.elementAt(_drawingToShow);
     });
@@ -19,6 +21,7 @@ class AnimationPreviewController {
   void setFrameDuration(Duration dur) {
     _drawingStream = Stream.periodic(dur, (_) {
       _drawingToShow++;
+      log('lol');
       if (_drawingToShow == _sketch.length) _drawingToShow = 0;
       return _sketch.elementAt(_drawingToShow);
     });
@@ -27,4 +30,11 @@ class AnimationPreviewController {
   void setSkecth(List<Drawing> sketch) => _sketch = sketch;
 
   Stream<Drawing> generateFrameCall() => _drawingStream;
+
+  Stream<Drawing> initialStream() => Stream.periodic(_frameDuration, (_) {
+        _drawingToShow++;
+        log('lol');
+        if (_drawingToShow == _sketch.length) _drawingToShow = 0;
+        return _sketch.elementAt(_drawingToShow);
+      });
 }

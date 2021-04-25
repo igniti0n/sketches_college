@@ -40,5 +40,6 @@ class Drawing extends Equatable {
   }
 
   @override
-  List<Object?> get props => [this.canvasPaths];
+  List<Object?> get props =>
+      [this.id, this.sketchId, this.canvasPaths.length, this.canvasPaths];
 }

@@ -36,6 +36,7 @@ class ColorPickerWidget extends StatelessWidget {
       title: const Text('Pick a color!'),
       content: SingleChildScrollView(
         child: ColorPicker(
+          enableAlpha: false,
           pickerColor: currentColor,
           onColorChanged: (Color newColor) {
             _selectedColor = newColor;

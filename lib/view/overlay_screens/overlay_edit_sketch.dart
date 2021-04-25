@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_app/view/overlay_screens/state_views.dart';
+import '../../contants.dart';
+import '../../core/error/settings_menu_button.dart';
 import '../../domain/entities/sketch.dart';
 import '../home_screen/sketches_bloc/sketches_bloc.dart';
 import 'package:paint_app/view/overlay_screens/overlay_bloc/overlay_bloc.dart'
@@ -51,11 +54,19 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
     return BlocBuilder<ob.OverlayBloc, ob.OverlayState>(
       builder: (context, state) {
         if (state is ob.OverlayLoading) {
-          return _loadingView(context);
+          return loadingView(context);
         } else if (state is ob.OverlayError) {
-          return _errorView(context, state.message);
+          return outcomeView(context, state.message, () {
+            BlocProvider.of<ob.OverlayBloc>(context)
+                .add(ob.ExitOverlay(context));
+            BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
+          });
         } else if (state is ob.OverlaySuccess) {
-          return _successView(context, state.message);
+          return outcomeView(context, state.message, () {
+            BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
+            BlocProvider.of<ob.OverlayBloc>(context)
+                .add(ob.ExitOverlay(context));
+          });
         } else if (state is ob.OverlayEditSketchStarted) {
           return _editView(context);
         } else if (state is ob.OverlayDeleteSketchStarted) {
@@ -66,61 +77,27 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
     );
   }
 
-  SimpleDialog _loadingView(BuildContext context) {
-    return SimpleDialog(
-      title: Text("Processing..."),
-      children: [
-        CircularProgressIndicator(),
-      ],
-    );
-  }
-
-  SimpleDialog _errorView(BuildContext context, String errorMessage) {
-    return SimpleDialog(
-      title: Text(errorMessage),
-      children: [
-        TextButton(
-            onPressed: () {
-              BlocProvider.of<ob.OverlayBloc>(context)
-                  .add(ob.ExitOverlay(context));
-              BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
-            },
-            child: Text("Done")),
-      ],
-    );
-  }
-
-  SimpleDialog _successView(BuildContext context, String message) {
-    return SimpleDialog(
-      title: Text(message),
-      children: [
-        TextButton(
-            onPressed: () {
-              BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
-              BlocProvider.of<ob.OverlayBloc>(context)
-                  .add(ob.ExitOverlay(context));
-            },
-            child: Text("Done")),
-      ],
-    );
-  }
-
   SimpleDialog _editView(BuildContext context) {
     return SimpleDialog(
+      backgroundColor: overlayBackground,
       children: [
-        TextField(
-          controller: _controller,
-          textInputAction: TextInputAction.done,
-          onChanged: (String text) => _sketchName = text,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _controller,
+            textInputAction: TextInputAction.done,
+            onChanged: (String text) => _sketchName = text,
+          ),
         ),
-        TextButton(
-            onPressed: () {
+        SettingsMenuButton(
+          onTap: () =>
               BlocProvider.of<ob.OverlayBloc>(context).add(ob.EditSketch(
-                _sketchName,
-                widget.editingSketch.id,
-              ));
-            },
-            child: Text("Done")),
+            _sketchName,
+            widget.editingSketch.id,
+          )),
+          splashColor: purpleBar,
+          text: 'Done',
+        ),
       ],
     );
   }
@@ -129,22 +106,39 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
     BuildContext context,
   ) {
     return SimpleDialog(
-      title:
-          Text("You want to delete sketch ${widget.editingSketch.sketchName}?"),
+      backgroundColor: overlayBackground,
+      title: Text("You want to proceed?"),
       children: [
-        TextButton(
-            onPressed: () {
-              BlocProvider.of<ob.OverlayBloc>(context).add(ob.DeleteSketch(
-                widget.editingSketch.id,
-              ));
-            },
-            child: Text("Delete")),
-        TextButton(
-            onPressed: () {
-              BlocProvider.of<ob.OverlayBloc>(context)
-                  .add(ob.ExitOverlay(context));
-            },
-            child: Text("Keep")),
+        Center(
+          child: SizedBox(
+            width: 300,
+            child: SingleChildScrollView(
+              child: Text(
+                  'YOu want to delete sketch: \n ${widget.editingSketch.sketchName}?'),
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SettingsMenuButton(
+              onTap: () => BlocProvider.of<ob.OverlayBloc>(context).add(
+                ob.DeleteSketch(
+                  widget.editingSketch.id,
+                ),
+              ),
+              splashColor: purpleBar,
+              contentColor: Colors.red.withAlpha(170),
+              text: 'delete',
+            ),
+            SettingsMenuButton(
+              onTap: () => BlocProvider.of<ob.OverlayBloc>(context)
+                  .add(ob.ExitOverlay(context)),
+              splashColor: purpleBar,
+              text: 'Keep',
+            ),
+          ],
+        ),
       ],
     );
   }

@@ -4,7 +4,7 @@ abstract class SettingsState extends Equatable {
   const SettingsState(this.paintSettings);
   final Paint paintSettings;
   @override
-  List<Object> get props => [paintSettings];
+  List<Object> get props => [paintSettings.color, paintSettings.blendMode];
 }
 
 class SettingsInitial extends SettingsState {

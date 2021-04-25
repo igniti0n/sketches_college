@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -10,12 +11,15 @@ import '../../../domain/entities/drawing.dart';
 class AppPainter extends CustomPainter {
   final Drawing drawing;
   final bool isForeground;
+  final bool isFirstPage;
+
   final isPreview;
 
   AppPainter({
     required this.drawing,
     this.isForeground = true,
     this.isPreview = false,
+    this.isFirstPage = false,
   });
 
   @override
@@ -34,6 +38,7 @@ class AppPainter extends CustomPainter {
           final Paint _currentPathSettings = canvasPath.paint;
 
           _paint = paintFrom(canvasPath.paint)..style = PaintingStyle.stroke;
+          // ..color = Colors.black.withAlpha(80);
 
           if (!isForeground) _paint..color = _paint.color.withOpacity(1);
 
@@ -45,8 +50,38 @@ class AppPainter extends CustomPainter {
 
           canvas.drawPath(_path, _paint);
 
-          if (_currentPathSettings.strokeWidth > 1)
-            for (int i = 0; i < canvasPath.drawPoints.length - 1; i++) {
+          // if (_currentPathSettings.strokeWidth > 1) {
+          //   final _arrayLength = canvasPath.drawPoints.length;
+
+          //   canvas.drawCircle(
+          //       canvasPath
+          //           .drawPoints[0], //.translate((isPreview ? -100 : 0), 0),
+          //       _currentPathSettings.strokeWidth < 1
+          //           ? _currentPathSettings.strokeWidth
+          //           : _radius,
+          //       _paint);
+
+          //   for (int i = 1; i < _arrayLength - 1; i++) {
+          //     final first = canvasPath.drawPoints[i];
+          //     final second = canvasPath.drawPoints[i - 1];
+
+          //     final _distance = (math.sqrt(math.pow(first.dx - second.dx, 2) +
+          //         math.pow(first.dy - second.dy, 2)));
+          //     if (_distance <= 10)
+          //       canvas.drawCircle(
+          //           canvasPath
+          //               .drawPoints[i], //.translate((isPreview ? -100 : 0), 0),
+          //           _currentPathSettings.strokeWidth < 1
+          //               ? _currentPathSettings.strokeWidth
+          //               : _radius,
+          //           _paint);
+          //   }
+          // }
+
+          if (_currentPathSettings.strokeWidth > 1) {
+            final _arrayLength = canvasPath.drawPoints.length;
+
+            for (int i = 1; i < _arrayLength - 1; i++) {
               canvas.drawCircle(
                   canvasPath
                       .drawPoints[i], //.translate((isPreview ? -100 : 0), 0),
@@ -55,8 +90,10 @@ class AppPainter extends CustomPainter {
                       : _radius,
                   _paint);
             }
+          }
         }
       });
+      if (!isForeground) log('painting background fml fml');
     }
 
     if (!isForeground)
@@ -72,5 +109,8 @@ class AppPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant AppPainter oldDelegate) => true;
+  bool shouldRepaint(covariant AppPainter oldDelegate) {
+    if (isForeground || isFirstPage) return true;
+    return oldDelegate.drawing != this.drawing;
+  }
 }

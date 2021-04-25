@@ -3,7 +3,6 @@ import 'dart:developer';
 import '../datasources/database_source.dart';
 
 import '../models/sketch_model.dart';
-import '../../domain/entities/drawing.dart';
 import '../../domain/entities/sketch.dart';
 import '../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
@@ -73,6 +72,7 @@ class SketchesRepositoryImpl extends SketchesRepository {
   @override
   Future<Either<Failure, List<Sketch>>> addNewSketch() async {
     try {
+      // throw UnimplementedError();
       final SketchModel _newSketch = SketchModel(
           sketchName: 'new sketch',
           drawings: [],
