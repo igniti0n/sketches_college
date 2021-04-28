@@ -54,12 +54,7 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
     } else if (event is DuplicateDrawing) {
       final either = await _drawingsRepositoryImpl.duplicateDrawing();
       yield _yieldState(either, 'Failed to duplicate the drawing.');
-    }
-    // else if (event is DeleteDrawing) {
-    //   final either = await _drawingsRepositoryImpl.deleteDrawing();
-    //   yield _yieldState(either, 'Failed to delete drawing from database.');
-    // }
-    else if (event is ScreenOpened) {
+    } else if (event is ScreenOpened) {
       final either = await _drawingsRepositoryImpl.getDrawings(event.sketchId);
       yield _yieldState(either, 'Failed to fetch drawings from database.');
     } else if (event is RefreshScreen) {
