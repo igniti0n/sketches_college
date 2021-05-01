@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../view/animation_preview_screen/animation_prewiev_screen.dart';
 import '../../view/home_screen/home_screen.dart';
 import '../../view/options_screen/settings_screen.dart';
-import '../../view/painter_screen/widgets/paint_page.dart';
+import '../../view/painter_screen/paint_page.dart';
 
 const String HOME_SCREEN_ROUTE = "/home_screen";
 const String PAINT_SCREEN_ROUTE = "/paint_screen";

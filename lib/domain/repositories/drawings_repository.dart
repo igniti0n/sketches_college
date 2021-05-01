@@ -15,6 +15,8 @@ abstract class DrawingsRepository {
   // Future<Either<Failure, void>> updateDrawing();
 
   get currentSketch;
+  get currentPage;
+  get maxPage;
 
   void updateLastCanvasPath(Offset offset, {bool isLast = false});
   void updateLaseCanvasPathOnPanEd();
@@ -23,6 +25,8 @@ abstract class DrawingsRepository {
 
   Future<Either<Failure, void>> nextDrawing();
   Future<Either<Failure, void>> previousDrawing();
+  Future<Either<Failure, void>> firstDrawing();
+  Future<Either<Failure, void>> lastDrawing();
 
   Drawing getCurrentDrawing();
   Drawing getPreviousDrawing();

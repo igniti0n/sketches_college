@@ -2,14 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/error/settings_menu_button.dart';
-import '../overlay_screens/overlay_bloc/overlay_bloc.dart';
+import '../../../core/error/settings_menu_button.dart';
+import '../../overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
 
-import '../../contants.dart';
-import '../../core/navigation/router.dart';
-import 'settings_bloc/settings_bloc.dart';
-import 'drawing_bloc/drawing_bloc.dart';
+import '../../../contants.dart';
+import '../../../core/navigation/router.dart';
+import '../settings_bloc/settings_bloc.dart';
+import '../drawing_bloc/drawing_bloc.dart';
 
 class SettingsPicker extends StatefulWidget {
   SettingsPicker({
@@ -49,7 +49,6 @@ class _SettingsPickerState extends State<SettingsPicker> {
                             Paint()
                               ..blendMode = BlendMode.clear
                               ..color = state.paintSettings.color,
-                            // Paint()..color = Colors.white,
                           ),
                         ),
                         child: Container(
@@ -68,17 +67,6 @@ class _SettingsPickerState extends State<SettingsPicker> {
                           child: Placeholder(),
                         ),
                       ),
-
-                      //  TextButton(
-                      //   onPressed: () => BlocProvider.of<SettingsBloc>(context).add(
-                      //     SettingsChanged(
-                      //       Paint()
-                      //         ..color = Colors.red
-                      //         ..blendMode = BlendMode.srcOver,
-                      //     ),
-                      //   ),
-                      //   child: Text('crvena'),
-                      // ),
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -127,7 +115,7 @@ class _SettingsPickerState extends State<SettingsPicker> {
                     child: Column(
                       children: [
                         Flexible(
-                          flex: 7,
+                          flex: 3,
                           child: StrokeSetting(),
                         ),
                         Flexible(
@@ -170,22 +158,6 @@ class _SettingsPickerState extends State<SettingsPicker> {
                                     Undo(),
                                   ),
                               icon: Icons.undo,
-                              splashColor: purpleBar),
-                        ),
-                        Expanded(
-                          child: SettingsMenuButton(
-                              onTap: () => _drawingBloc.add(
-                                    NextDrawing(),
-                                  ),
-                              icon: Icons.skip_next,
-                              splashColor: purpleBar),
-                        ),
-                        Expanded(
-                          child: SettingsMenuButton(
-                              onTap: () => _drawingBloc.add(
-                                    PreviousDrawing(),
-                                  ),
-                              icon: Icons.skip_previous,
                               splashColor: purpleBar),
                         ),
                         Expanded(

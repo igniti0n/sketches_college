@@ -25,16 +25,19 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   ];
   String _currentSketchId = '4';
 
-  int _currentlyViewdSketch = 0;
+  int _currentlyViewdDrawing = 0;
 
-  bool _canPreformAction() => _currentlyViewdSketch >= 0;
+  bool _canPreformAction() => _currentlyViewdDrawing >= 0;
 
   get currentSketch => _currentDrawings;
+
+  get currentPage => _currentlyViewdDrawing + 1;
+  get maxPage => _currentDrawings.length;
 
   @override
   Future<Either<Failure, void>> getDrawings(String sketchId) async {
     try {
-      _currentlyViewdSketch = 0;
+      _currentlyViewdDrawing = 0;
       _currentSketchId = sketchId;
 
       final List<DrawingModel> _res =
@@ -65,7 +68,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   Future<Either<Failure, void>> saveDrawing() async {
     try {
       await _databaseSource
-          .updateDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
+          .updateDrawing(_currentDrawings.elementAt(_currentlyViewdDrawing));
 
       return Right(null);
     } catch (err) {
@@ -78,21 +81,21 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   Future<Either<Failure, void>> nextDrawing() async {
     try {
       final res = await _databaseSource
-          .updateDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
-      log(res.toString());
+          .updateDrawing(_currentDrawings.elementAt(_currentlyViewdDrawing));
+      // log(res.toString());
       //for the first drawing
       if (res == 0)
         await _databaseSource.addNewDrawing(
-          _currentDrawings.elementAt(_currentlyViewdSketch),
+          _currentDrawings.elementAt(_currentlyViewdDrawing),
         );
 
-      _currentlyViewdSketch++;
+      _currentlyViewdDrawing++;
 
-      log((_currentlyViewdSketch == _currentDrawings.length).toString());
-      log(_currentlyViewdSketch.toString());
-      log(_currentDrawings.length.toString());
+      // log((_currentlyViewdDrawing == _currentDrawings.length).toString());
+      // log(_currentlyViewdDrawing.toString());
+      // log(_currentDrawings.length.toString());
       //no more drawings
-      if (_currentlyViewdSketch == _currentDrawings.length) {
+      if (_currentlyViewdDrawing == _currentDrawings.length) {
         final DrawingModel _newDrawing = DrawingModel(
             canvasPaths: [],
             sketchId: _currentSketchId,
@@ -104,7 +107,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
       return Right(null);
     } catch (err) {
-      // _currentlyViewdSketch--;
+      // _currentlyViewdDrawing--;
       log(err.toString());
       return Left(DatabaseFailure());
     }
@@ -113,10 +116,10 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   @override
   Future<Either<Failure, void>> previousDrawing() async {
     try {
-      if (_currentlyViewdSketch > 0) {
+      if (_currentlyViewdDrawing > 0) {
         await _databaseSource
-            .updateDrawing(_currentDrawings.elementAt(_currentlyViewdSketch));
-        _currentlyViewdSketch--;
+            .updateDrawing(_currentDrawings.elementAt(_currentlyViewdDrawing));
+        _currentlyViewdDrawing--;
       }
       return Right(null);
     } catch (err) {
@@ -124,7 +127,39 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
       return Left(DatabaseFailure());
     }
 
-    // log("DRAWING NO:$_currentlyViewdSketch");
+    // log("DRAWING NO:$_currentlyViewdDrawing");
+  }
+
+  @override
+  Future<Either<Failure, void>> firstDrawing() async {
+    try {
+      await _databaseSource
+          .updateDrawing(_currentDrawings.elementAt(_currentlyViewdDrawing));
+      _currentlyViewdDrawing = 0;
+
+      return Right(null);
+    } catch (err) {
+      log(err.toString());
+      return Left(DatabaseFailure());
+    }
+
+    // log("DRAWING NO:$_currentlyViewdDrawing");
+  }
+
+  @override
+  Future<Either<Failure, void>> lastDrawing() async {
+    try {
+      await _databaseSource
+          .updateDrawing(_currentDrawings.elementAt(_currentlyViewdDrawing));
+      _currentlyViewdDrawing = _currentDrawings.length - 1;
+
+      return Right(null);
+    } catch (err) {
+      log(err.toString());
+      return Left(DatabaseFailure());
+    }
+
+    // log("DRAWING NO:$_currentlyViewdDrawing");
   }
 
   @override
@@ -134,18 +169,18 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
 
       if (_currentDrawings.length > 1) {
         res = await _databaseSource.deleteDrawing(
-          _currentDrawings.elementAt(_currentlyViewdSketch).id,
+          _currentDrawings.elementAt(_currentlyViewdDrawing).id,
         );
-        _currentDrawings.removeAt(_currentlyViewdSketch);
-        if (_currentlyViewdSketch == _currentDrawings.length)
-          _currentlyViewdSketch--;
-        //   _currentlyViewdSketch++;
+        _currentDrawings.removeAt(_currentlyViewdDrawing);
+        if (_currentlyViewdDrawing == _currentDrawings.length)
+          _currentlyViewdDrawing--;
+        //   _currentlyViewdDrawing++;
         // else
       } else {
-        _currentDrawings[_currentlyViewdSketch] = DrawingModel(
+        _currentDrawings[_currentlyViewdDrawing] = DrawingModel(
           canvasPaths: [],
           sketchId: _currentSketchId,
-          id: _currentDrawings.elementAt(_currentlyViewdSketch).id,
+          id: _currentDrawings.elementAt(_currentlyViewdDrawing).id,
         );
       }
       return Right(res);
@@ -153,7 +188,7 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
       return Left(DatabaseFailure());
     }
     // log("drawings lenghts:${_currentDrawings.drawings.length}");
-    // log(_currentlyViewdSketch.toString());
+    // log(_currentlyViewdDrawing.toString());
   }
 
   @override
@@ -161,14 +196,14 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
     try {
       final DrawingModel _newDrawing = DrawingModel(
         canvasPaths:
-            List.from(_currentDrawings[_currentlyViewdSketch].canvasPaths),
+            List.from(_currentDrawings[_currentlyViewdDrawing].canvasPaths),
         sketchId: _currentSketchId,
         id: DateTime.now().toIso8601String(),
       );
       await _databaseSource.addNewDrawing(_newDrawing);
-      _currentlyViewdSketch++;
-      // log("inserting at $_currentlyViewdSketch");
-      _currentDrawings.insert(_currentlyViewdSketch, _newDrawing);
+      _currentlyViewdDrawing++;
+      // log("inserting at $_currentlyViewdDrawing");
+      _currentDrawings.insert(_currentlyViewdDrawing, _newDrawing);
       return Right(null);
     } catch (err) {
       return Left(DatabaseFailure());
@@ -180,47 +215,47 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
     if (_canPreformAction()) {
       final _newPath = CanvasPathModel(drawPoints: [offset], paint: paint);
       _newPath.movePathTo(offset.dx, offset.dy);
-      _currentDrawings.elementAt(_currentlyViewdSketch).addNewPath(_newPath);
+      _currentDrawings.elementAt(_currentlyViewdDrawing).addNewPath(_newPath);
     }
   }
 
   @override
   void removeLastCanvasPath() {
-    if (_currentlyViewdSketch >= 0) {
-      _currentDrawings.elementAt(_currentlyViewdSketch).removeLastPath();
+    if (_currentlyViewdDrawing >= 0) {
+      _currentDrawings.elementAt(_currentlyViewdDrawing).removeLastPath();
     }
   }
 
   @override
   void updateLastCanvasPath(Offset offset, {bool isLast = false}) {
     if (_canPreformAction())
-      _currentDrawings.elementAt(_currentlyViewdSketch).updateLastPath(offset);
+      _currentDrawings.elementAt(_currentlyViewdDrawing).updateLastPath(offset);
   }
 
   @override
   void updateLaseCanvasPathOnPanEd() {
     if (_canPreformAction())
       _currentDrawings
-          .elementAt(_currentlyViewdSketch)
+          .elementAt(_currentlyViewdDrawing)
           .updateLastPathOnPanEnd();
   }
 
   Drawing getCurrentDrawing() {
     // log('drawings length: ' + _currentDrawings.length.toString());
-    // elementAt(_currentlyViewdSketch)).toMap().toString());
-    return _currentDrawings.elementAt(_currentlyViewdSketch);
+    // elementAt(_currentlyViewdDrawing)).toMap().toString());
+    return _currentDrawings.elementAt(_currentlyViewdDrawing);
   }
 
   Drawing getPreviousDrawing() {
-    if (_currentlyViewdSketch > 0)
-      return _currentDrawings.elementAt(_currentlyViewdSketch - 1);
+    if (_currentlyViewdDrawing > 0)
+      return _currentDrawings.elementAt(_currentlyViewdDrawing - 1);
     else
       return getCurrentDrawing();
   }
 
   /*@override
   void changeBackgroundColorOfCurrentDrawing(Color color) {
-    _currentDrawings.drawings.elementAt(_currentlyViewdSketch).backgroundColor =
+    _currentDrawings.drawings.elementAt(_currentlyViewdDrawing).backgroundColor =
         color;
   }
 */

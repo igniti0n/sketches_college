@@ -12,6 +12,7 @@ import 'data/repositories/sketches_repository_impl.dart';
 import 'view/home_screen/sketches_bloc/sketches_bloc.dart';
 import 'view/overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'view/painter_screen/drawing_bloc/drawing_bloc.dart';
+import 'view/painter_screen/drawing_navigation_bloc/navigation_bloc.dart';
 import 'view/painter_screen/settings_bloc/settings_bloc.dart';
 
 void main() {
@@ -34,6 +35,10 @@ final DrawingsRepositoryImpl _drawingsRepositoryImpl =
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  //
+
+  final _drawingNavBloc = DrawingNavigationBloc(_drawingsRepositoryImpl);
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -42,7 +47,8 @@ class MyApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<DrawingBloc>(
-                create: (_) => DrawingBloc(_drawingsRepositoryImpl),
+                create: (_) =>
+                    DrawingBloc(_drawingsRepositoryImpl, _drawingNavBloc),
               ),
               BlocProvider<SketchesBloc>(
                 create: (_) => SketchesBloc(_sketchesRepositoryImpl),
@@ -57,6 +63,9 @@ class MyApp extends StatelessWidget {
               BlocProvider<AnimationBloc>(
                 create: (_) => AnimationBloc(_drawingsRepositoryImpl),
               ),
+              BlocProvider<DrawingNavigationBloc>(
+                create: (_) => _drawingNavBloc,
+              ),
             ],
             child: MaterialApp(
               title: 'Flutter Demo',
@@ -66,10 +75,11 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                   primarySwatch: Colors.blue,
                   textTheme: TextTheme(
-                      bodyText1: TextStyle(
-                    fontSize: 20,
-                    color: Colors.blue,
-                  )),
+                    bodyText1: TextStyle(
+                      fontSize: 20,
+                      color: Colors.blue,
+                    ),
+                  ),
                   iconTheme: IconThemeData(color: Colors.blue)),
 
               onGenerateRoute: onGenerateRoute,

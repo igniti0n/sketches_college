@@ -24,10 +24,6 @@ class RefreshScreen extends DrawingEvent {}
 //!drawing actions
 class SaveDrawing extends DrawingEvent {}
 
-class PreviousDrawing extends DrawingEvent {}
-
-class NextDrawing extends DrawingEvent {}
-
 class DuplicateDrawing extends DrawingEvent {}
 
 // class DeleteDrawing extends DrawingEvent {}
