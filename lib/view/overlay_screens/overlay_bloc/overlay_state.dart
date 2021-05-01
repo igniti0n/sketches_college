@@ -20,8 +20,9 @@ class OverlayColorPickerStarted extends OverlayState {}
 //!Overlay progress states
 class OverlaySuccess extends OverlayState {
   final String message;
+  final String sketchId;
 
-  OverlaySuccess(this.message);
+  OverlaySuccess(this.message, {this.sketchId = ''});
 }
 
 class OverlayLoading extends OverlayState {}

@@ -34,7 +34,7 @@ class DatabaseSourceImpl extends DatabaseSource {
   }
 
   _initDb() async {
-    // await deleteDatabase(join(await getDatabasesPath(), 'sketches.db'));
+    await deleteDatabase(join(await getDatabasesPath(), 'sketches.db'));
     return await openDatabase(
       join(await getDatabasesPath(), 'sketches.db'),
       onCreate: (db, version) async {

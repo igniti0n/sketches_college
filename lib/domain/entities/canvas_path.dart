@@ -38,12 +38,10 @@ class CanvasPath extends Equatable {
 
     //  dev.log("distance:    " + _distance.toString());
     if (paint.strokeWidth <= 2)
-      // path.quadraticBezierTo(xx, yy, x, y);
-      path.lineTo(x, y);
-    else if (_distance > 2.24)
+
       // path.arcToPoint(Offset(x, y));
-      // path.quadraticBezierTo(xx, yy, x, y);
-      path.lineTo(x, y);
+      path.quadraticBezierTo(xx, yy, x, y);
+    // path.lineTo(x, y);
     else
       path.moveTo(x, y);
   }

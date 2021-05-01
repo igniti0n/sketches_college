@@ -35,7 +35,6 @@ dependencies:
   font_awesome_flutter: ^9.0.0
   http: ^0.13.1
   image_gallery_saver: ^1.6.9
-  mockito: ^5.0.3
   path: ^1.8.0
   path_provider: ^2.0.1
   permission_handler: ^6.1.3
@@ -45,6 +44,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^5.0.5
+  flutter_launcher_icons: ^0.9.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/quick_sketch_icon_rounded.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
