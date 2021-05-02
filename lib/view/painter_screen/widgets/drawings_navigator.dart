@@ -1,7 +1,7 @@
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/error/settings_menu_button.dart';
+import '../../../core/widgets/settings_menu_button.dart';
 import '../../overlay_screens/overlay_bloc/overlay_bloc.dart';
 import '../drawing_navigation_bloc/navigation_bloc.dart';
 

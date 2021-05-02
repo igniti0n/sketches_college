@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../contants.dart';
-import '../../core/error/settings_menu_button.dart';
+import '../../core/widgets/settings_menu_button.dart';
 
 SimpleDialog loadingView(BuildContext context) {
   return SimpleDialog(

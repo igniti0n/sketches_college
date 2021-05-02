@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'state_views.dart';
 import '../../contants.dart';
-import '../../core/error/settings_menu_button.dart';
+import '../../core/widgets/settings_menu_button.dart';
 import '../../domain/entities/sketch.dart';
 import '../home_screen/sketches_bloc/sketches_bloc.dart';
 import 'package:paint_app/view/overlay_screens/overlay_bloc/overlay_bloc.dart'

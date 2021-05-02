@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../domain/entities/drawing.dart';
-import '../../../domain/entities/sketch.dart';
 import '../../../domain/repositories/drawings_repository.dart';
 import '../animation_preview_controller.dart';
 

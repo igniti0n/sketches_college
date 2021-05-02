@@ -1,8 +1,6 @@
 import '../../domain/entities/drawing.dart';
 import '../../domain/entities/sketch.dart';
 
-import 'drawing_model.dart';
-
 class SketchModel extends Sketch {
   SketchModel(
       {required String sketchName,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import '../../domain/entities/drawing.dart';
 import 'canvas_path_model.dart';

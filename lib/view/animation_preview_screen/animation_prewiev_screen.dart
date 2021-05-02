@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/error/settings_menu_button.dart';
+import '../../core/widgets/settings_menu_button.dart';
 import '../painter_screen/widgets/app_painter.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart' as sl;
 

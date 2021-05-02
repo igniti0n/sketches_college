@@ -4,7 +4,7 @@ import 'state_views.dart';
 import '../painter_screen/drawing_bloc/drawing_bloc.dart';
 import '../painter_screen/drawing_navigation_bloc/navigation_bloc.dart';
 import '../../contants.dart';
-import '../../core/error/settings_menu_button.dart';
+import '../../core/widgets/settings_menu_button.dart';
 
 import 'overlay_bloc/overlay_bloc.dart';
 

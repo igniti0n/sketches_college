@@ -32,7 +32,6 @@ class DatabaseSourceImpl extends DatabaseSource {
   }
 
   _initDb() async {
-    // //TODO:REMOVE FOR THE RELEASE
     // await deleteDatabase(join(await getDatabasesPath(), 'sketches.db'));fluzt
     return await openDatabase(
       join(await getDatabasesPath(), 'sketches.db'),

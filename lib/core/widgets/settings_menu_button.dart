@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingsMenuButton extends StatelessWidget {

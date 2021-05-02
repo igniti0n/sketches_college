@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 
 class CanvasPath extends Equatable {
   final Path path = Path();
-  Paint paint;
+  final Paint paint;
   final List<Offset> drawPoints;
   CanvasPath({
     required this.paint,

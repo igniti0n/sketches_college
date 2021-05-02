@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'canvas_path.dart';
@@ -8,7 +6,7 @@ class Drawing extends Equatable {
   final List<CanvasPath> canvasPaths;
   final String sketchId;
   final String id;
-  Color backgroundColor;
+  final Color backgroundColor;
 
   Drawing({
     this.backgroundColor = Colors.white,
