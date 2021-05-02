@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:paint_app/domain/repositories/drawings_repository.dart';
-import 'package:paint_app/view/overlay_screens/overlay_delete_drawing.dart';
+import '../../../domain/repositories/drawings_repository.dart';
+import '../overlay_delete_drawing.dart';
 import '../overlay_error.dart';
 import '../../../domain/entities/sketch.dart';
 import '../../../domain/repositories/sketches_repository.dart';
@@ -52,6 +52,7 @@ class OverlayBloc extends Bloc<OverlayEvent, OverlayState> {
     } else if (event is DeleteSketch) {
       yield OverlayLoading();
       final either = await _sketchesRepository.deleteSketch(event.sketchId);
+
       yield either.fold((l) => OverlayError('Deleting sketch failed.'),
           (r) => OverlaySuccess('Deleting completed successfully!'));
     } else if (event is DeleteDrawing) {

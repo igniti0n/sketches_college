@@ -1,11 +1,9 @@
 import 'dart:developer';
 
 import '../models/drawing_model.dart';
-import '../../domain/entities/drawing.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../domain/entities/sketch.dart';
 import '../models/sketch_model.dart';
 
 const String sketchTable = 'sketch';
@@ -34,7 +32,8 @@ class DatabaseSourceImpl extends DatabaseSource {
   }
 
   _initDb() async {
-    await deleteDatabase(join(await getDatabasesPath(), 'sketches.db'));
+    // //TODO:REMOVE FOR THE RELEASE
+    // await deleteDatabase(join(await getDatabasesPath(), 'sketches.db'));fluzt
     return await openDatabase(
       join(await getDatabasesPath(), 'sketches.db'),
       onCreate: (db, version) async {

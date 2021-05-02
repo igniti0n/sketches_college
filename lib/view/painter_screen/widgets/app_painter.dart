@@ -42,8 +42,10 @@ class AppPainter extends CustomPainter {
 
           if (!isForeground) _paint..color = _paint.color.withOpacity(1);
 
-          final _radius = math.sqrt(_currentPathSettings.strokeWidth) /
-              ((_currentPathSettings.strokeWidth > 6) ? 20 : 60);
+          final _radius = _currentPathSettings.strokeWidth /
+              10000; //math.sqrt(_currentPathSettings.strokeWidth) / 1;
+          //  /
+          //     ((_currentPathSettings.strokeWidth > 6) ? 20 : 20);
 
           Path _path = Path.from(canvasPath.path);
           // if (isPreview) _path = _path.shift(Offset(-100, 0));

@@ -53,8 +53,8 @@ class HomeScreen extends StatelessWidget {
                   itemBuilder: (ctx, index) {
                     return SketchWidget(
                       sketch: state.sketches[index],
-                      beginAnimate: (index + 1) / (_itemLength + 1),
-                      endAnimate: (index + 2) / (_itemLength + 1),
+                      beginAnimate: 0, //(index + 1) / (_itemLength + 1),
+                      endAnimate: 1, //(index + 2) / (_itemLength + 1),
                       // animationController: _animationController,
                     );
                   });

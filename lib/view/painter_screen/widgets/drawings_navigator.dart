@@ -1,9 +1,9 @@
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_app/core/error/settings_menu_button.dart';
-import 'package:paint_app/view/overlay_screens/overlay_bloc/overlay_bloc.dart';
-import 'package:paint_app/view/painter_screen/drawing_navigation_bloc/navigation_bloc.dart';
+import '../../../core/error/settings_menu_button.dart';
+import '../../overlay_screens/overlay_bloc/overlay_bloc.dart';
+import '../drawing_navigation_bloc/navigation_bloc.dart';
 
 import '../../../contants.dart';
 

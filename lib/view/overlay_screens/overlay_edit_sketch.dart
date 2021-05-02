@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_app/view/overlay_screens/state_views.dart';
+import 'state_views.dart';
 import '../../contants.dart';
 import '../../core/error/settings_menu_button.dart';
 import '../../domain/entities/sketch.dart';
@@ -62,11 +62,13 @@ class _EditSketchDialogState extends State<EditSketchDialog> {
             BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
           });
         } else if (state is ob.OverlaySuccess) {
-          return outcomeView(context, state.message, () {
-            BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
-            BlocProvider.of<ob.OverlayBloc>(context)
-                .add(ob.ExitOverlay(context));
-          });
+          BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
+          BlocProvider.of<ob.OverlayBloc>(context).add(ob.ExitOverlay(context));
+          // return outcomeView(context, state.message, () {
+          //   BlocProvider.of<SketchesBloc>(context).add(FetchAllSketches());
+          //   BlocProvider.of<ob.OverlayBloc>(context)
+          //       .add(ob.ExitOverlay(context));
+          // });
         } else if (state is ob.OverlayEditSketchStarted) {
           return _editView(context);
         } else if (state is ob.OverlayDeleteSketchStarted) {

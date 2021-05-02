@@ -40,13 +40,13 @@ class _SketchWidgetState extends State<SketchWidget>
   void initState() {
     super.initState();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 240));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _opacityAnimation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
       parent: _animationController,
       curve: Interval(
         widget.beginAnimate,
         widget.endAnimate,
-        curve: Curves.easeIn,
+        curve: Curves.easeOutCubic,
       ),
     ));
   }

@@ -72,8 +72,7 @@ class _SettingsPickerState extends State<SettingsPicker> {
                       child: GestureDetector(
                         onTap: () {
                           _overlayBloc.add(ShowColorPicker(
-                              currentColor:
-                                  Colors.green, //state.paintSettings.color,
+                              currentColor: state.paintSettings.color,
                               context: context));
                         },
                         child: Container(
@@ -136,11 +135,7 @@ class _SettingsPickerState extends State<SettingsPicker> {
                         Expanded(
                           child: SettingsMenuButton(
                               onTap: () {
-                                _drawingBloc.add(DuplicateDrawing());
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text('Drawing duplicated!'),
-                                ));
+                                _drawingBloc.add(DuplicateDrawing(context));
                               },
                               icon: Icons.control_point_duplicate,
                               splashColor: purpleBar),
@@ -157,7 +152,7 @@ class _SettingsPickerState extends State<SettingsPicker> {
                               onTap: () => _drawingBloc.add(
                                     Undo(),
                                   ),
-                              icon: Icons.undo,
+                              icon: Icons.replay_outlined,
                               splashColor: purpleBar),
                         ),
                         Expanded(

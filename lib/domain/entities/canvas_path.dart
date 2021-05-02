@@ -17,7 +17,7 @@ class CanvasPath extends Equatable {
   void createPathFromOffsets() {
     if (drawPoints.isNotEmpty) {
       movePathTo(drawPoints.first.dx, drawPoints.first.dy);
-      for (int i = 1; i < drawPoints.length; i++) {
+      for (int i = 1; i < drawPoints.length - 1; i++) {
         _doQuadricPathMovment(drawPoints[i].dx, drawPoints[i].dy,
             drawPoints[i - 1].dx, drawPoints[i - 1].dy);
       }
@@ -37,13 +37,25 @@ class CanvasPath extends Equatable {
     final _distance = (sqrt(pow(x - xx, 2) + pow(y - yy, 2)));
 
     //  dev.log("distance:    " + _distance.toString());
-    if (paint.strokeWidth <= 2)
+    if (paint.strokeWidth <= 1)
 
       // path.arcToPoint(Offset(x, y));
       path.quadraticBezierTo(xx, yy, x, y);
-    // path.lineTo(x, y);
-    else
-      path.moveTo(x, y);
+    else {
+      if (paint.strokeWidth <= 4) {
+        if (_distance > 1.4)
+          // path.lineTo(x, y);
+          path.quadraticBezierTo(xx, yy, x, y);
+        else
+          path.moveTo(x, y);
+      } else {
+        if (_distance > 2.4)
+          // path.lineTo(x, y);
+          path.quadraticBezierTo(xx, yy, x, y);
+        else
+          path.moveTo(x, y);
+      }
+    }
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import '../../../domain/entities/drawing.dart';
+import '../../domain/entities/drawing.dart';
 
 class AnimationPreviewController {
   Duration _frameDuration = Duration(milliseconds: 250);
@@ -21,13 +21,16 @@ class AnimationPreviewController {
   void setFrameDuration(Duration dur) {
     _drawingStream = Stream.periodic(dur, (_) {
       _drawingToShow++;
-      log('lol');
+
       if (_drawingToShow == _sketch.length) _drawingToShow = 0;
       return _sketch.elementAt(_drawingToShow);
     });
   }
 
-  void setSkecth(List<Drawing> sketch) => _sketch = sketch;
+  void setSkecth(List<Drawing> sketch) {
+    _drawingToShow = 0;
+    _sketch = sketch;
+  }
 
   Stream<Drawing> generateFrameCall() => _drawingStream;
 

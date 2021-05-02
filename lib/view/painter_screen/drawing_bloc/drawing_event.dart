@@ -24,7 +24,11 @@ class RefreshScreen extends DrawingEvent {}
 //!drawing actions
 class SaveDrawing extends DrawingEvent {}
 
-class DuplicateDrawing extends DrawingEvent {}
+class DuplicateDrawing extends DrawingEvent {
+  final BuildContext ctx;
+
+  DuplicateDrawing(this.ctx);
+}
 
 // class DeleteDrawing extends DrawingEvent {}
 

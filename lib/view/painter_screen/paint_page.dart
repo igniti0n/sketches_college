@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_app/contants.dart';
-import 'package:paint_app/domain/entities/drawing.dart';
-import 'package:paint_app/view/painter_screen/widgets/drawings_navigator.dart';
+import '../../contants.dart';
+import '../../domain/entities/drawing.dart';
+import 'widgets/drawings_navigator.dart';
 
 import '../../core/native/image_saver.dart';
 import 'settings_bloc/settings_bloc.dart';

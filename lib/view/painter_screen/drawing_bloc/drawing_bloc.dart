@@ -5,8 +5,9 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:paint_app/view/painter_screen/drawing_navigation_bloc/navigation_bloc.dart';
+import '../drawing_navigation_bloc/navigation_bloc.dart';
 import '../../../core/navigation/router.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/repositories/drawings_repository.dart';
@@ -62,6 +63,11 @@ class DrawingBloc extends Bloc<DrawingEvent, DrawingState> {
     } else if (event is DuplicateDrawing) {
       final either = await _drawingsRepositoryImpl.duplicateDrawing();
       _drawingNavigationBloc.add(Refresh());
+      if (either.isRight())
+        ScaffoldMessenger.of(event.ctx).showSnackBar(const SnackBar(
+          duration: Duration(milliseconds: 1111),
+          content: Text('Drawing duplicated!'),
+        ));
       yield _yieldState(either, 'Failed to duplicate the drawing.');
     } else if (event is ScreenOpened) {
       final either = await _drawingsRepositoryImpl.getDrawings(event.sketchId);

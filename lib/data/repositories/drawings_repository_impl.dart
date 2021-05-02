@@ -67,8 +67,13 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   @override
   Future<Either<Failure, void>> saveDrawing() async {
     try {
-      await _databaseSource
+      final res = await _databaseSource
           .updateDrawing(_currentDrawings.elementAt(_currentlyViewdDrawing));
+
+      if (res == 0)
+        await _databaseSource.addNewDrawing(
+          _currentDrawings.elementAt(_currentlyViewdDrawing),
+        );
 
       return Right(null);
     } catch (err) {
@@ -213,7 +218,8 @@ class DrawingsRepositoryImpl extends DrawingsRepository {
   @override
   void addNewCanvasPath(Paint paint, Offset offset) {
     if (_canPreformAction()) {
-      final _newPath = CanvasPathModel(drawPoints: [offset], paint: paint);
+      final _newPath = CanvasPathModel(
+          drawPoints: [Offset(offset.dx, offset.dy)], paint: paint);
       _newPath.movePathTo(offset.dx, offset.dy);
       _currentDrawings.elementAt(_currentlyViewdDrawing).addNewPath(_newPath);
     }

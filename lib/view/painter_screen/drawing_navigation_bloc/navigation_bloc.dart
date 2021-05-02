@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:paint_app/core/error/failures.dart';
-import 'package:paint_app/domain/repositories/drawings_repository.dart';
+import '../../../core/error/failures.dart';
+import '../../../domain/repositories/drawings_repository.dart';
 
 part 'navigation_event.dart';
 part 'navigation_state.dart';
@@ -21,6 +21,9 @@ class DrawingNavigationBloc
   Stream<DrawingNavigationState> mapEventToState(
     DrawingNavigationEvent event,
   ) async* {
+    yield NavigationInitial(
+        _drawingsRepositoryImpl.currentPage, _drawingsRepositoryImpl.maxPage);
+
     if (event is PreviousDrawing) {
       final either = await _drawingsRepositoryImpl.previousDrawing();
       yield _yieldState(

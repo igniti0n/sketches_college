@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' hide OverlayState;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_app/view/overlay_screens/state_views.dart';
-import 'package:paint_app/view/painter_screen/drawing_bloc/drawing_bloc.dart';
-import 'package:paint_app/view/painter_screen/drawing_navigation_bloc/navigation_bloc.dart';
+import 'state_views.dart';
+import '../painter_screen/drawing_bloc/drawing_bloc.dart';
+import '../painter_screen/drawing_navigation_bloc/navigation_bloc.dart';
 import '../../contants.dart';
 import '../../core/error/settings_menu_button.dart';
 
@@ -46,8 +46,10 @@ class DeleteDrawingDialogWidget extends StatelessWidget {
               BlocProvider.of<DrawingNavigationBloc>(context).add(Refresh());
             },
           );
+        } else if (state is OverlayDeleteSketchStarted) {
+          return _delete(ctx);
         }
-        return _delete(ctx);
+        return Container();
       },
     );
   }

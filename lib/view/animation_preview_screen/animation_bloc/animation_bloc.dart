@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../domain/entities/drawing.dart';
 import '../../../domain/entities/sketch.dart';
 import '../../../domain/repositories/drawings_repository.dart';
-import '../widgets/animation_preview_controller.dart';
+import '../animation_preview_controller.dart';
 
 part 'animation_event.dart';
 part 'animation_state.dart';
