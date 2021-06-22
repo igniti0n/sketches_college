@@ -12,9 +12,12 @@ class SketchModel extends Sketch {
           id: id,
         );
 
-  factory SketchModel.fromJson(Map<String, dynamic> map) {
+  factory SketchModel.fromJson(Map<String, dynamic> map, {String? id}) {
     return SketchModel(
-        sketchName: map['sketchName'], drawings: [], id: map['id']);
+      sketchName: map['sketchName'],
+      drawings: [],
+      id: id ?? map['id'],
+    );
   }
 
   Map<String, dynamic> toJson() {

@@ -1,4 +1,4 @@
-package com.example.animated_drawings_application
+package com.animated_drawings_application
 
 import io.flutter.embedding.android.FlutterActivity
 

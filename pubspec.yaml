@@ -24,28 +24,29 @@ dependencies:
   flutter:
     sdk: flutter
   auto_size_text_pk: ^3.0.0
+  cloud_firestore: ^2.2.2
   cupertino_icons: ^1.0.2
   dartz: 0.10.0-nullsafety.1
   equatable: ^2.0.0
   expandable_bottom_sheet: ^1.0.0+2
+  firebase_core: ^1.3.0
   flutter_bloc: ^7.0.0
   flutter_colorpicker: ^0.4.0
   flutter_test_ui: ^1.0.0
-  fullscreen: ^1.0.3
   font_awesome_flutter: ^9.0.0
+  fullscreen: ^1.0.3
   http: ^0.13.1
   image_gallery_saver: ^1.6.9
   path: ^1.8.0
   path_provider: ^2.0.1
   permission_handler: ^6.1.3
   sqflite: ^2.0.0+3
-  syncfusion_flutter_sliders: ^19.1.56-beta
-
+  syncfusion_flutter_sliders: ^19.1.69-beta
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.0.5
   flutter_launcher_icons: ^0.9.0
+  mockito: ^5.0.5
 
 flutter_icons:
   android: "launcher_icon"

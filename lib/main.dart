@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fullscreen/fullscreen.dart';
+import 'package:paint_app/data/datasources/network_data_source.dart';
 import 'data/datasources/database_source.dart';
 import 'view/animation_preview_screen/animation_bloc/animation_bloc.dart';
 
@@ -14,6 +15,7 @@ import 'view/overlay_screens/overlay_bloc/overlay_bloc.dart';
 import 'view/painter_screen/drawing_bloc/drawing_bloc.dart';
 import 'view/painter_screen/drawing_navigation_bloc/navigation_bloc.dart';
 import 'view/painter_screen/settings_bloc/settings_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,21 +30,24 @@ void main() {
   runApp(MyApp());
 }
 
+Future<void> initilize() async {
+  await Firebase.initializeApp();
+  await FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+}
+
+final NetworkDataSource _networkDataSource = NetworkDataSource();
 final SketchesRepositoryImpl _sketchesRepositoryImpl =
-    SketchesRepositoryImpl(DatabaseSourceImpl.dbSource);
+    SketchesRepositoryImpl(_networkDataSource);
 final DrawingsRepositoryImpl _drawingsRepositoryImpl =
-    DrawingsRepositoryImpl(DatabaseSourceImpl.dbSource);
+    DrawingsRepositoryImpl(_networkDataSource);
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  //
-
   final _drawingNavBloc = DrawingNavigationBloc(_drawingsRepositoryImpl);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY),
+        future: initilize(),
         builder: (context, snapshot) {
           return MultiBlocProvider(
             providers: [

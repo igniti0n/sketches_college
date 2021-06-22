@@ -12,34 +12,7 @@ class SketchesRepositoryImpl extends SketchesRepository {
   final DatabaseSource _databaseSource;
   SketchesRepositoryImpl(this._databaseSource);
   //!treba mi samo prvi drawing sketcha z aprikaz na home screenu
-  List<SketchModel> _userSketches = [
-    // SketchModel(
-    //     drawings: [Drawing(canvasPaths: [], sketchId: 'prvi', id: '1')],
-    //     id: "prvi",
-    //     sketchName: "prvi"),
-    // SketchModel(
-    //     drawings: [Drawing(canvasPaths: [], sketchId: 'drugi', id: '2')],
-    //     id: "drugi",
-    //     sketchName: "drugi"),
-    // SketchModel(
-    //     drawings: [Drawing(canvasPaths: [], sketchId: 'treci', id: '3')],
-    //     id: "treci",
-    //     sketchName: "treci"),
-    // SketchModel(
-    //     drawings: [Drawing(canvasPaths: [], sketchId: 'cetvrti', id: '4')],
-    //     id: "cetvrti",
-    //     sketchName: "cetvrti"),
-  ];
-
-  /* @override
-  Either<Failure, Sketch> getSketch(String id) {
-    try {
-      return Right(
-          _userSketches.firstWhere((Sketch sketch) => sketch.id == id));
-    } catch (error) {
-      return Left(SketchNotFoundFailure());
-    }
-  }*/
+  List<SketchModel> _userSketches = [];
 
   @override
   List<Sketch> get currentSketches => _userSketches;

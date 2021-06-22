@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "693876837265",
+    "project_id": "college-flutter-ivan",
+    "storage_bucket": "college-flutter-ivan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693876837265:android:123cbb7946a62f8aaae830",
+        "android_client_info": {
+          "package_name": "com.animated_drawings_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693876837265-dt19gq7vhp8k16nmqekf7nsh1disqh5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCys-Jl8L84ocqh9ArC1xF49a3badFiY3Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693876837265-dt19gq7vhp8k16nmqekf7nsh1disqh5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

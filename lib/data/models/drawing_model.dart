@@ -15,14 +15,14 @@ class DrawingModel extends Drawing {
           id: id,
         );
 
-  factory DrawingModel.fromJson(Map<String, dynamic> map) {
+  factory DrawingModel.fromJson(Map<String, dynamic> map, {String? id}) {
     // log(map['canvasPaths'].toString());
     return DrawingModel(
       canvasPaths: (jsonDecode(map['canvasPaths']) as List<dynamic>)
           .map((e) => CanvasPathModel.fromMap(e))
           .toList(),
       sketchId: map['sketchId'],
-      id: map['id'],
+      id: id ?? map['id'],
     );
   }
 
